@@ -8,6 +8,7 @@ import { TranslateConfigService } from '../../../shared/services/translate/trans
 import { StorageService } from '../../../shared/services/storage/storage.service';
 import { CommonBaseComponent } from '../../../../app/shared/components/common-base/common-base.component';
 import { AppConstants } from '../../../../app/app.constants';
+import { environment } from '../../../../environments/environment';
 declare let google: any;
 @Component({
   selector: 'app-register',
@@ -41,7 +42,7 @@ export class RegisterComponent extends CommonBaseComponent implements OnInit {
     setTimeout(() => {
       if (google && google.accounts && google.accounts.id) {
         google.accounts.id.initialize({
-          client_id: '600135194254-c8a82q0ngtpk2nsqbfd1difb5an9te3b.apps.googleusercontent.com', // aws access id - 600135194254-lmetug59vn8r2giqag31jhn4nf985enc.apps.googleusercontent.com
+          client_id: environment.google.id, 
           callback: (response: any) => {
             console.log(response);
             this.handleGoogleLoginResponse(response)

@@ -6,6 +6,9 @@ export const environment = {
   production: false,
   api: {
     URL: 'http://klrapigateloadbalancer-1724370165.us-east-1.elb.amazonaws.com/'
+  },
+  google: {
+    id: '600135194254-c8a82q0ngtpk2nsqbfd1difb5an9te3b.apps.googleusercontent.com' // aws access id - 600135194254-lmetug59vn8r2giqag31jhn4nf985enc.apps.googleusercontent.com
   }
 };
 
