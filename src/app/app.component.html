@@ -1,0 +1,15 @@
+<app-header></app-header>
+<main class="main pages content">
+    <!-- <div (click)="drawerBackdropClicked()" class="mat-drawer-backdrop drawer-backdrop" [ngClass]="{'enabled': drawerBackdropEnable}"></div> -->
+    <router-outlet></router-outlet>
+</main>
+<app-footer></app-footer>
+<div id="preloader-active">
+  <div class="preloader d-flex align-items-center justify-content-center">
+      <div class="preloader-inner position-relative">
+          <div class="text-center">
+              <img src="assets/imgs/theme/loading.gif" alt="" />
+          </div>
+      </div>
+  </div>
+</div>

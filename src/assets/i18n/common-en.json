@@ -1,0 +1,10 @@
+{
+    "PASSWORDNOTEMPTY": "password should not be empty",
+    "CLOSE": "close",
+    "USERNAMEPASSWORDINVALIDMESSAGE": "username or password can not be empty",
+    "INVALIDCREDENTIALS": "In-valid credentials",
+    "HELLO": "Hello",
+    "WELCOME": "Welcome to our application common en json",
+    "login": "Login here",
+    "INVALIDDETAILS": "In valid details"
+}

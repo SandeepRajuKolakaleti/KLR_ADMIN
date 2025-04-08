@@ -1,0 +1,9 @@
+{
+    "welcomeMessage": "qwertyu {{firstName}}",
+    "PASSWORDNOTEMPTY": "password not match to confirm password",
+    "CLOSE": "close",
+    "USERNAMEPASSWORDINVALIDMESSAGE": "username or password can not be empty",
+    "INVALIDCREDENTIALS": "In-valid credentials",
+    "HELLO": "Hello welcome",
+    "WELCOME": "Welcome to our application 12345"
+}
