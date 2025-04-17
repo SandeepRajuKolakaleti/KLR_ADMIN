@@ -1,148 +1,210 @@
 <main class="main-wrap">
     <section class="content-main">
-        <div class="row">
-            <div class="col-9">
-                <div class="content-header">
-                    <h2 class="content-title">Add New Product</h2>
-                    <div>
-                        <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
-                        <button class="btn btn-md rounded font-sm hover-up">Publich</button>
+        <form [formGroup]="productForm">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        <div>
+                            <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                            <button class="btn btn-md rounded font-sm hover-up">Publich</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4>Basic</h4>
-                    </div>
-                    <div class="card-body">
-                        <form>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Basic</h4>
+                        </div>
+                        <div class="card-body">
+                            
                             <div class="mb-4">
-                                <label for="product_name" class="form-label">Product title</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_name" />
+                                <label for="product_name" class="form-label">Product Name</label>
+                                <input type="text" placeholder="Type here" formControlName="Name" class="form-control" id="product_name" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Product Slug</label>
+                                <input type="text" placeholder="Type here" formControlName="Slug" class="form-control" id="product_slug" />
+                            </div>
+                            <!-- <div class="mb-4 row">
+                                <div class="col-lg-4">
+                                    <label class="form-label">Category</label>
+                                    <select formControlName="Category" class="form-select">
+                                        <option>Select Category</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="form-label">Sub-Category</label>
+                                    <select formControlName="SubCategory" class="form-select">
+                                        <option>Select Sub Category</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="form-label">Child Category</label>
+                                    <select formControlName="ChildCategory" class="form-select">
+                                        <option>Select Child Category</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="mb-4">
+                                <label class="form-label">Brand</label>
+                                <input placeholder="Type here" formControlName="Brand" class="form-control"/>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">SKU</label>
+                                <input placeholder="Type here" formControlName="SKU" class="form-control" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Regular price</label>
+                                <input placeholder="Type here" formControlName="Price" class="form-control" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Offer Price</label>
+                                <input placeholder="Type here" formControlName="OfferPrice" class="form-control" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Stock Quantity</label>
+                                <input type="text" placeholder="0" formControlName="StockQuantity" class="form-control" id="stock_qty" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Weight</label>
+                                <input type="text" placeholder="0" formControlName="Weight" class="form-control" id="stock_qty" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Short description</label>
+                                <textarea placeholder="Type here" formControlName="ShortDescription" class="form-control" rows="4"></textarea>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Full description</label>
-                                <textarea placeholder="Type here" class="form-control" rows="4"></textarea>
+                                <textarea placeholder="Type here" formControlName="LongDescription" class="form-control" rows="4"></textarea>
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <div class="mb-4">
-                                        <label class="form-label">Regular price</label>
+                                    <div class="mb-4" formGroupName="Highlight">
+                                        <label class="form-label">Highlight</label>
                                         <div class="row gx-2">
-                                            <input placeholder="$" type="text" class="form-control" />
+                                            <section class="example-section">
+                                                <mat-checkbox class="example-margin" formControlName="TopProduct">Top Product</mat-checkbox>
+                                                <mat-checkbox class="example-margin" formControlName="NewArrival">New Arrival</mat-checkbox>
+                                                <mat-checkbox class="example-margin" formControlName="BestProduct">Best Product</mat-checkbox>
+                                                <mat-checkbox class="example-margin" formControlName="FeaturedProduct">Featured Product</mat-checkbox>
+                                            </section>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-4">
-                                        <label class="form-label">Promotional price</label>
-                                        <input placeholder="$" type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <label class="form-label">Currency</label>
-                                    <select class="form-select">
-                                        <option>USD</option>
-                                        <option>EUR</option>
-                                        <option>RUBL</option>
-                                    </select>
-                                </div>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label">Tax rate</label>
-                                <input type="text" placeholder="%" class="form-control" id="product_name" />
+                                <label class="form-label">Status</label>
+                                <select formControlName="Status" class="form-select">
+                                    <option>Select Status</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">In Active</option>
+                                </select>
+                                <!-- Active <mat-slide-toggle class="example-margin">
+                                    In Active
+                                </mat-slide-toggle> -->
                             </div>
-                            <label class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" value="" />
-                                <span class="form-check-label"> Make a template </span>
-                            </label>
-                        </form>
-                    </div>
-                </div>
-                <!-- card end// -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4>Shipping</h4>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-4">
-                                        <label for="product_name" class="form-label">Width</label>
-                                        <input type="text" placeholder="inch" class="form-control" id="product_name" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-4">
-                                        <label for="product_name" class="form-label">Height</label>
-                                        <input type="text" placeholder="inch" class="form-control" id="product_name" />
-                                    </div>
-                                </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">SEO Title</label>
+                                <input placeholder="Type here" formControlName="SEOTitle" class="form-control" />
                             </div>
                             <div class="mb-4">
-                                <label for="product_name" class="form-label">Weight</label>
-                                <input type="text" placeholder="gam" class="form-control" id="product_name" />
+                                <label class="form-label">SEO Description</label>
+                                <input placeholder="Type here" formControlName="SEODescription" class="form-control" />
                             </div>
                             <div class="mb-4">
-                                <label for="product_name" class="form-label">Shipping fees</label>
-                                <input type="text" placeholder="$" class="form-control" id="product_name" />
+                                <label class="form-label">Specification</label>
+                                <div>
+                                    Disabled
+                                    <mat-slide-toggle formControlName="SpecificationStatus" class="example-margin">
+                                        Enabled
+                                    </mat-slide-toggle>
+                                </div>
+                                <div *ngIf="productForm.controls['SpecificationStatus'].value">
+                                    <ng-container formArrayName="Specifications">
+                                        <ng-container *ngFor="let specification of Specifications.controls; let i = index" [formGroupName]="i">
+                                            <div class="lesson-form-row">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-select formControlName="key"
+                                                            placeholder="key">
+                                                        <mat-option value="color">color</mat-option>
+                                                        <mat-option value="size">size</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <mat-form-field appearance="fill">
+                                                    <input matInput
+                                                           formControlName="specification"
+                                                           placeholder="specification">
+                                                </mat-form-field>
+                                                <button mat-mini-fab (click)="deleteSpecification(i)">
+                                                    <mat-icon class="add-course-btn">delete_sweep</mat-icon>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+                                        <button mat-mini-fab (click)="addSpecification()">
+                                            <mat-icon class="add-course-btn">library_add</mat-icon>
+                                        </button>
+                                    </ng-container>
+                                </div>
                             </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- card end// -->
-            </div>
-            <div class="col-lg-3">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4>Media</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="input-upload">
-                            <img src="assets/imgs/theme/upload.svg" alt="" />
-                            <input class="form-control" type="file" />
+                            <div>
+
+                            </div>
                         </div>
                     </div>
+                    <!-- card end// -->
                 </div>
-                <!-- card end// -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4>Organization</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row gx-2">
-                            <div class="col-sm-6 mb-3">
-                                <label class="form-label">Category</label>
-                                <select class="form-select">
-                                    <option>Automobiles</option>
-                                    <option>Home items</option>
-                                    <option>Electronics</option>
-                                    <option>Smartphones</option>
-                                    <option>Sport items</option>
-                                    <option>Baby and Tous</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-6 mb-3">
-                                <label class="form-label">Sub-category</label>
-                                <select class="form-select">
-                                    <option>Nissan</option>
-                                    <option>Honda</option>
-                                    <option>Mercedes</option>
-                                    <option>Chevrolet</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="product_name" class="form-label">Tags</label>
-                                <input type="text" class="form-control" />
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <img [src]="imgSrc" alt="" />
+                                <input (change)="onFileSelected($event)" class="form-control" type="file" />
                             </div>
                         </div>
-                        <!-- row.// -->
                     </div>
+                    <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Organization</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row gx-2">
+                                <div class="mb-4 row">
+                                    <div class="col-lg-12">
+                                        <label class="form-label">Category</label>
+                                        <select formControlName="Category" class="form-select">
+                                            <option>Select Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-4 row">
+                                    <div class="col-lg-12">
+                                        <label class="form-label">Sub-Category</label>
+                                        <select formControlName="SubCategory" class="form-select">
+                                            <option>Select Sub Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-4 row">
+                                    <div class="col-lg-12">
+                                        <label class="form-label">Child Category</label>
+                                        <select formControlName="ChildCategory" class="form-select">
+                                            <option>Select Child Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- row.// -->
+                        </div>
+                    </div>
+                    <!-- card end// -->
                 </div>
-                <!-- card end// -->
             </div>
-        </div>
+        </form>
     </section>
 </main>

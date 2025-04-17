@@ -1,0 +1,134 @@
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Sub Categories</h2>
+                <p>Add, edit or delete a Sub category</p>
+            </div>
+            <div>
+                <input type="text" placeholder="Search Sub Categories" class="form-control bg-white" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <form>
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_name" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="product_slug" class="form-label">Slug</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Parent</label>
+                                <select class="form-select">
+                                    <option>Fruit</option>
+                                    <option>Snack</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control"></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary">Create Sub category</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                                <!-- Checkbox Column -->
+                                <ng-container matColumnDef="select">
+                                  <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                  [checked]="selection.hasValue() && isAllSelected()"
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                  [aria-label]="checkboxLabel()">
+                                    </mat-checkbox>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                  (change)="$event ? selection.toggle(row) : null"
+                                                  [checked]="selection.isSelected(row)"
+                                                  [aria-label]="checkboxLabel(row)">
+                                    </mat-checkbox>
+                                  </td>
+                                </ng-container>
+                              
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="position">
+                                  <th mat-header-cell *matHeaderCellDef> No. </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                                </ng-container>
+                
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="image">
+                                    <th mat-header-cell *matHeaderCellDef> Image </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a class="itemside" href="javascript:void(0)">
+                                            <div class="left">
+                                                <img src="{{element.image}}" class="img-sm img-thumbnail" alt="Item" />
+                                            </div>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                              
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                  <th mat-header-cell *matHeaderCellDef> Name </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                </ng-container>
+                              
+                                <!-- Price Column -->
+                                <ng-container matColumnDef="price">
+                                  <th mat-header-cell *matHeaderCellDef> Price </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                                </ng-container>
+                              
+                                <!-- Status Column -->
+                                <ng-container matColumnDef="status">
+                                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                                </ng-container>
+                
+                                <!-- Date Column -->
+                                <ng-container matColumnDef="date">
+                                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                                </ng-container>
+                
+                                <!-- Action Column -->
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a href="Javascript:void(0)" (click)="edit(element, $event)" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a>
+                                        <a href="Javascript:void(0)" (click)="delete(element, $event)" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a>
+                                    </td>
+                                </ng-container>
+                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;sticky: true"
+                                    (click)="selection.toggle(row)">
+                                </tr>
+                            </table>
+                            <div class="pagination-area mt-30 mb-50">
+                                <mat-paginator #paginator
+                                  [pageSizeOptions]="[2,4,6,8,10]" showFirstLastButtons>
+                                </mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- .col// -->
+                </div>
+                <!-- .row // -->
+            </div>
+            <!-- card body .// -->
+        </div>
+        <!-- card .// -->
+    </section>
+</main>
