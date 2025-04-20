@@ -30,7 +30,7 @@ export class AuthService {
 		this.commonService.setAuthenticated(value);
 	}
 
-	loginApiToken(options: { email: string; password: string; phonenumber: number }): Observable<any> {
+	loginApiToken(options: { email: string; password: string }): Observable<any> {
 		return this.http.post(this.API_URL+ 'api/users/login', options).pipe(map(data => {
 			return data;
 		}));
@@ -66,7 +66,7 @@ export class AuthService {
 			Authorization: '',
 		};
 		if (data && data !== '') {
-			headers.Authorization = data.token_type + ' ' + data.access_token;
+			headers.Authorization = data.token_type + ' ' + data.access_token_local;
 		}
 		return headers;
 	}

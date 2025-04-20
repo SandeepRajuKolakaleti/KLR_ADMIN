@@ -1,40 +1,74 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { PeriodicElement } from '../../../products/components/products/products.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-
+import { CategoryService } from '../../services/category.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { forkJoin, map } from 'rxjs';
+import { AppConstants } from 'src/app/app.constants';
+export interface Category {
+  Id: number,
+  ThumnailImage: String,
+  Name: String,
+  Slug: String,
+  Status: false
+}
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit, AfterViewInit {
-ELEMENT_DATA: PeriodicElement[] = [
-    {position: 1, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Hydrogen', price: 1.0079, status: 'H', date: '2-2-2020'},
-    {position: 2, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Helium', price: 4.0026, status: 'He', date: '2-2-2020'},
-    {position: 3, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Lithium', price: 6.941, status: 'Li', date: '2-2-2020'},
-    {position: 4, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Beryllium', price: 9.0122, status: 'Be', date: '2-2-2020'},
-    {position: 1, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Hydrogen', price: 1.0079, status: 'H', date: '2-2-2020'},
-    {position: 2, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Helium', price: 4.0026, status: 'He', date: '2-2-2020'},
-    {position: 3, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Lithium', price: 6.941, status: 'Li', date: '2-2-2020'},
-    {position: 4, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Beryllium', price: 9.0122, status: 'Be', date: '2-2-2020'},
-    {position: 1, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Hydrogen', price: 1.0079, status: 'H', date: '2-2-2020'},
-    {position: 2, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Helium', price: 4.0026, status: 'He', date: '2-2-2020'},
-    {position: 3, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Lithium', price: 6.941, status: 'Li', date: '2-2-2020'},
-    {position: 4, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Beryllium', price: 9.0122, status: 'Be', date: '2-2-2020'},
-  ];
-
-  displayedColumns: string[] = ['select', 'position', 'image', 'name', 'price', 'status', 'date', 'action'];
-  dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  ELEMENT_DATA: Category[] = [];
+  displayedColumns: string[] = ['select', 'image', 'name', 'slug', 'status', 'action'];
+  dataSource = new MatTableDataSource<Category>(this.ELEMENT_DATA);
+  selection = new SelectionModel<Category>(true, []);
   @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  imgSrc: string | ArrayBuffer | null = AppConstants.image.uploadDefault;
+  isCreateFlow = true;
 
-  constructor(private router: Router) {}
+  categoryFrom!: FormGroup;
+
+  constructor(private router: Router, private categoryService: CategoryService, private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.categoryFrom = this.fb.group({
+      Id: [''],
+      File: [null, Validators.required],
+      Name: ['', Validators.required],
+      Slug: ['', Validators.required],
+      Status: ['', Validators.required]
+    });
+    this.getAllCategories();
+  }
 
+  getAllCategories() {
+    this.categoryService.getAll().subscribe(async (data: Category[]) => {
+      let categories: Category[] = data;
+      this.processImgToBase64(categories).subscribe((categoryes: any) => {
+        console.log(categoryes);
+        this.dataSource = new MatTableDataSource<Category>(categoryes);
+        this.dataSource.paginator = this.paginator;
+      });
+    });
+  }
+
+  processImgToBase64(data: any) {
+    const imageObservables = data.map((category: {
+      ThumnailImagePath: string; ThumnailImage: string 
+    }) => {
+      return this.categoryService.getImageBase64({ url: category.ThumnailImage }).pipe(
+        map((response: any) => {
+          category.ThumnailImagePath = category.ThumnailImage;
+          category.ThumnailImage = response? response.img: '';
+
+          return category;
+        })
+      );
+    });
+  
+    return forkJoin(imageObservables); 
   }
 
   ngAfterViewInit() {
@@ -56,22 +90,88 @@ ELEMENT_DATA: PeriodicElement[] = [
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: Category): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.Id + 1}`;
   }
 
   edit(element: any, event: any) {
     event.preventDefault();
     event.stopPropagation();
     console.log(element)
+    this.isCreateFlow = false;
+    this.categoryFrom.controls['Id'].setValue(element.Id);
+    this.categoryFrom.controls['File'].setValue(element.ThumnailImagePath);
+    this.categoryFrom.controls['Slug'].setValue(element.Slug);
+    this.categoryFrom.controls['Name'].setValue(element.Name);
+    this.categoryFrom.controls['Status'].setValue(element.Status);
+    this.imgSrc = element.ThumnailImage;
   }
 
   delete(element: any, event: any) {
     event.preventDefault();
     event.stopPropagation();
-    console.log(element)
+    console.log(element);
+    this.categoryService.delete(element.Id).subscribe((data) => {
+      if (data) {
+        this.getAllCategories();
+      }
+    });
+  }
+
+  createCategory() {
+    console.log(this.categoryFrom.value);
+    const formData = new FormData();
+    formData.append('ThumnailImage', '');
+    formData.append('Name', this.categoryFrom.controls['Name'].value);
+    formData.append('Slug', this.categoryFrom.controls['Slug'].value);
+    formData.append('Status', this.categoryFrom.controls['Status'].value);
+    formData.append('file', this.categoryFrom.get('File')?.value);
+    this.categoryService.create(formData).subscribe((data) => {
+      console.log(data);
+      this.getAllCategories();
+    });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0] as Blob;
+  
+      // Show preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imgSrc = reader.result;
+      };
+      this.categoryFrom.controls['File'].patchValue(file);
+      reader.readAsDataURL(file);
+  
+      // You can also store the file for uploading later
+      // this.selectedFile = file;
+    }
+  }
+
+  editCategory() {
+    console.log(this.categoryFrom.value);
+    const formData = new FormData();
+    formData.append('Id', this.categoryFrom.controls['Id'].value);
+    formData.append('Name', this.categoryFrom.controls['Name'].value);
+    formData.append('Slug', this.categoryFrom.controls['Slug'].value);
+    formData.append('Status', this.categoryFrom.controls['Status'].value);
+    if (typeof this.categoryFrom.get('File')?.value === 'object') {
+      formData.append('ThumnailImage', '');
+      formData.append('file', this.categoryFrom.get('File')?.value);
+    } else {
+      formData.append('ThumnailImage', this.categoryFrom.get('File')?.value);
+    }
+    this.categoryService.update(formData).subscribe((data: any) => {
+      console.log(data);
+      this.getAllCategories();
+      this.categoryFrom.reset();
+      this.imgSrc = AppConstants.image.uploadDefault;
+      this.isCreateFlow = true;
+    });
   }
 }

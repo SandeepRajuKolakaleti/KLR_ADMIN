@@ -172,5 +172,9 @@ export class AppConstants {
     deliveryBoy: 'deliveryBoy'
   }
 
+  public static  image = {
+    uploadDefault: 'assets/imgs/theme/upload.svg'
+  }
+
   
 }

@@ -138,12 +138,12 @@
                                                            placeholder="specification">
                                                 </mat-form-field>
                                                 <button mat-mini-fab (click)="deleteSpecification(i)">
-                                                    <mat-icon class="add-course-btn">delete_sweep</mat-icon>
+                                                    <i class="icon material-icons md-delete_sweep"></i>
                                                 </button>
                                             </div>
                                         </ng-container>
                                         <button mat-mini-fab (click)="addSpecification()">
-                                            <mat-icon class="add-course-btn">library_add</mat-icon>
+                                            <i class="icon material-icons md-library_add"></i>
                                         </button>
                                     </ng-container>
                                 </div>
@@ -163,7 +163,7 @@
                         <div class="card-body">
                             <div class="input-upload">
                                 <img [src]="imgSrc" alt="" />
-                                <input (change)="onFileSelected($event)" class="form-control" type="file" />
+                                <input formControlName="File" (change)="onFileSelected($event)" class="form-control" type="file" />
                             </div>
                         </div>
                     </div>

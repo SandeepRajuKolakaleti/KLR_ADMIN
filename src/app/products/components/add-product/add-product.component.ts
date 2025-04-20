@@ -13,7 +13,8 @@ export class AddProductComponent {
   constructor(private fb: FormBuilder) {}
   ngOnInit() {
     this.productForm = this.fb.group({
-      ThmbnailImage: ['', Validators.required],
+      File: ['', Validators.required],
+      // ThmbnailImage: ['', Validators.required],
       Name: ['', Validators.required],
       Slug: ['', Validators.required],
       Category: ['', Validators.required],
