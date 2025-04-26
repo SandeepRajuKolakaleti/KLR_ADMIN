@@ -65,6 +65,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.router.navigate(['categories/sub-category'] );
     } else if (value === 'categories/child-category') {
       this.router.navigate(['categories/child-category'] );
+    } else if (value === 'brands') {
+      this.router.navigate(['categories/brands'] );
     } else if (value === 'orders') {
       this.router.navigate(['orders'] );
     } else if (value === 'vendors') {

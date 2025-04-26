@@ -5,6 +5,7 @@ import { CategoriesRoutingModule } from './categories-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { SubCategoriesComponent } from './components/sub-categories/sub-categories.component';
 import { ChildCategoriesComponent } from './components/child-categories/child-categories.component';
+import { BrandsComponent } from './components/brands/brands.component';
 
 
 
@@ -12,7 +13,8 @@ import { ChildCategoriesComponent } from './components/child-categories/child-ca
   declarations: [
     CategoriesComponent,
     SubCategoriesComponent,
-    ChildCategoriesComponent
+    ChildCategoriesComponent,
+    BrandsComponent
   ],
   imports: [
     CommonModule,

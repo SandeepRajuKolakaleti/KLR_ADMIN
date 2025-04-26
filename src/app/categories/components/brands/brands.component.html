@@ -2,7 +2,7 @@
     <section class="content-main">
         <div class="content-header">
             <div>
-                <h2 class="content-title card-title">Child Categories</h2>
+                <h2 class="content-title card-title">Brands</h2>
                 <p>Add, edit or delete a category</p>
             </div>
             <div>
@@ -13,7 +13,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <form [formGroup]="childCategoryFrom">
+                        <form [formGroup]="brandFrom">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Image</label>
                                 <img [src]="imgSrc" alt="" />
@@ -22,22 +22,6 @@
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Name</label>
                                 <input formControlName="Name" type="text" placeholder="Type here" class="form-control" id="product_name" />
-                            </div>
-                            <div class="mb-4">
-                                <label for="product_name" class="form-label">Category</label>
-                                <mat-select formControlName="Category" placeholder="category" [(value)]="selectedCategory">
-                                    <mat-option *ngFor="let category of categories" [value]="category.Id">
-                                      {{ category.Name }}
-                                    </mat-option>
-                                </mat-select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="product_name" class="form-label">Sub Category</label>
-                                <mat-select formControlName="SubCategory" placeholder="sub category" [(value)]="selectedSubCategory">
-                                    <mat-option *ngFor="let subCategory of subCategories" [value]="subCategory.Id">
-                                      {{ subCategory.Name }}
-                                    </mat-option>
-                                </mat-select>
                             </div>
                             <div class="mb-4">
                                 <label for="product_slug" class="form-label">Slug</label>
@@ -52,7 +36,7 @@
                             </div>
                             <div class="d-grid">
                                 <button *ngIf="isCreateFlow" (click)="create()" class="btn btn-primary">Create category</button>
-                                <button *ngIf="!isCreateFlow" (click)="editSubCategory()" class="btn btn-primary">Edit category</button>
+                                <button *ngIf="!isCreateFlow" (click)="editBrand()" class="btn btn-primary">Edit category</button>
                             </div>
                         </form>
                     </div>
@@ -94,18 +78,6 @@
                                 <ng-container matColumnDef="name">
                                   <th mat-header-cell *matHeaderCellDef> Name </th>
                                   <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
-                                </ng-container>
-
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="category">
-                                    <th mat-header-cell *matHeaderCellDef> Category </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.Category}} </td>
-                                  </ng-container>
-
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="subCategory">
-                                    <th mat-header-cell *matHeaderCellDef> Sub Category </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.SubCategory}} </td>
                                 </ng-container>
                               
                                 <!-- Price Column -->
