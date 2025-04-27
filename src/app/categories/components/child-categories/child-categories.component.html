@@ -3,7 +3,7 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Child Categories</h2>
-                <p>Add, edit or delete a category</p>
+                <p>Add, edit or delete a Child category</p>
             </div>
             <div>
                 <input type="text" placeholder="Search Categories" class="form-control bg-white" />
@@ -25,7 +25,7 @@
                             </div>
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Category</label>
-                                <mat-select formControlName="Category" placeholder="category" [(value)]="selectedCategory">
+                                <mat-select formControlName="Category" placeholder="category" [(value)]="selectedCategory" (selectionChange)="onSelectCategoryChange($event)">
                                     <mat-option *ngFor="let category of categories" [value]="category.Id">
                                       {{ category.Name }}
                                     </mat-option>
@@ -51,8 +51,8 @@
                                 </select>
                             </div>
                             <div class="d-grid">
-                                <button *ngIf="isCreateFlow" (click)="create()" class="btn btn-primary">Create category</button>
-                                <button *ngIf="!isCreateFlow" (click)="editSubCategory()" class="btn btn-primary">Edit category</button>
+                                <button *ngIf="isCreateFlow" (click)="create()" class="btn btn-primary">Create</button>
+                                <button *ngIf="!isCreateFlow" (click)="editSubCategory()" class="btn btn-primary">Edit</button>
                             </div>
                         </form>
                     </div>

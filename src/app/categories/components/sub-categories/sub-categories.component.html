@@ -3,7 +3,7 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Sub Categories</h2>
-                <p>Add, edit or delete a category</p>
+                <p>Add, edit or delete a Sub category</p>
             </div>
             <div>
                 <input type="text" placeholder="Search Categories" class="form-control bg-white" />
@@ -43,8 +43,8 @@
                                 </select>
                             </div>
                             <div class="d-grid">
-                                <button *ngIf="isCreateFlow" (click)="create()" class="btn btn-primary">Create category</button>
-                                <button *ngIf="!isCreateFlow" (click)="editSubCategory()" class="btn btn-primary">Edit category</button>
+                                <button *ngIf="isCreateFlow" (click)="create()" class="btn btn-primary">Create</button>
+                                <button *ngIf="!isCreateFlow" (click)="editSubCategory()" class="btn btn-primary">Edit</button>
                             </div>
                         </form>
                     </div>

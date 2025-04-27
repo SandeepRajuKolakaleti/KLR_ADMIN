@@ -44,6 +44,14 @@ export class SubCategoryService {
     })
   }
 
+  getSubCategoriesById(Id: number): Observable<SubCategory> {
+    const url = environment.api.URL+ 'api/sub-categories/subCategory/'+ Id;
+    const CrApiSessionStorage = this.storageService.get('ApiToken');
+    return this.http.get<SubCategory>(url, {
+      headers: this.getAuthorizationHeaders(CrApiSessionStorage),
+    });
+  }
+
   delete(Id: string) {
     const url = environment.api.URL+ 'api/sub-categories/subCategory/'+ Id;
     const CrApiSessionStorage = this.storageService.get('ApiToken');

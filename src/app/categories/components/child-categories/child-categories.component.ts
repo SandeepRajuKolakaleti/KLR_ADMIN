@@ -55,6 +55,12 @@ export class ChildCategoriesComponent {
     });
     this.getAll();
     this.getAllCategories();
+  }
+
+  onSelectCategoryChange(event: any) {
+    console.log(this.selectedCategory);
+    console.log('Selected value:', event.value);
+    console.log('Form value:', this.childCategoryFrom.value);
     this.getAllSubCategories();
   }
 
@@ -66,13 +72,15 @@ export class ChildCategoriesComponent {
   }
 
   getAllSubCategories() {
-    this.subCategoryService.getAll().subscribe((data) => {
+    console.log(this.selectedCategory);
+    this.subCategoryService.getSubCategoriesById(this.selectedCategory).subscribe((data) => {
       console.log(data);
       this.subCategories = data;
     })
   }
 
   getAll() {
+    this.childCategoryFrom.reset();
     this.childCategoryService.getAll().subscribe(async (data: ChildCategory[]) => {
       if(data && data.length > 0) {
         let brands: ChildCategory[] = data;
@@ -145,6 +153,7 @@ export class ChildCategoriesComponent {
     this.childCategoryFrom.controls['SubCategory'].setValue(parseInt(element.SubCategory, 10));
     this.selectedSubCategory = parseInt(element.SubCategory, 10);
     this.imgSrc = element.ThumnailImage;
+    this.getAllSubCategories();
   }
 
   delete(element: any, event: any) {
