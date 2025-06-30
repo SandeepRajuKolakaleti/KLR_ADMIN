@@ -3,10 +3,10 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Products List</h2>
-                <p>Lorem ipsum dolor sit amet.</p>
+                <p>products goes here...</p>
             </div>
             <div>
-                <a href="javascript:void(0)" class="btn btn-light rounded font-md">Export</a>
+                <a href="javascript:void(0)" (click)="exportProducts()" class="btn btn-light rounded font-md">Export</a>
                 <a href="javascript:void(0)" class="btn btn-light rounded font-md">Import</a>
                 <a href="javascript:void(0)" (click)="createNewProduct()" class="btn btn-primary btn-sm rounded">Create new</a>
             </div>
@@ -92,7 +92,7 @@
         <!-- card end// -->
         <div class="pagination-area mt-30 mb-50">
             <mat-paginator #paginator
-              [pageSizeOptions]="[2,4,6,8,10]" showFirstLastButtons>
+              [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons>
             </mat-paginator>
         </div>
     </section>
