@@ -44,6 +44,14 @@ export class ChildCategoryService {
     })
   }
 
+  getChildCategoriesById(Id: number): Observable<ChildCategory> {
+    const url = environment.api.URL+ 'api/child-categories/childCategory/'+ Id;
+    const CrApiSessionStorage = this.storageService.get('ApiToken');
+    return this.http.get<ChildCategory>(url, {
+      headers: this.getAuthorizationHeaders(CrApiSessionStorage),
+    });
+  }
+
   delete(Id: string) {
     const url = environment.api.URL+ 'api/child-categories/child-category/'+ Id;
     const CrApiSessionStorage = this.storageService.get('ApiToken');

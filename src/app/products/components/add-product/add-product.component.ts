@@ -2,6 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { CategoryService } from 'src/app/categories/services/category.service';
+import { SubCategoryService } from 'src/app/categories/services/sub-category.service';
+import { ChildCategoryService } from 'src/app/categories/services/child-category.service';
 
 @Component({
   selector: 'app-add-product',
@@ -40,11 +43,22 @@ export class AddProductComponent implements OnDestroy, OnInit {
     SEODescription: '',
     SpecificationStatus: 'Active',
   };
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private productService:ProductService) {}
+  categories: any[] = [];
+  subCategories: any[] = [];
+  childCategories: any[] = [];
+  constructor(private fb: FormBuilder, 
+    private route: ActivatedRoute, 
+    private productService:ProductService,
+    private categoryService: CategoryService,
+    private subCategoryService: SubCategoryService,
+    private childCategoryService: ChildCategoryService
+  ) {}
   ngOnInit() {
     this.productForm = this.fb.group({
       File: ['', Validators.required],
       // ThmbnailImage: ['', Validators.required],
+      Id: [''],
+      Vendor: ['1'],
       Name: ['', Validators.required],
       Slug: ['', Validators.required],
       Category: ['', Validators.required],
@@ -67,17 +81,99 @@ export class AddProductComponent implements OnDestroy, OnInit {
       Status: ['', Validators.required],
       SEOTitle: ['', Validators.required],
       SEODescription: ['', Validators.required],
-      SpecificationStatus: ['', Validators.required],
+      SpecificationStatus: [''],
       Specifications: this.fb.array([])
     });
     this.sub = this.route.queryParams.subscribe(params => {
       if (params && params["data"]) {
         this.product = (JSON.parse(params["data"])).product || this.product;
+        console.log('Product:', this.product);
         if (this.product && this.product.Id) {
           this.fillForm();
         }
       }
     });
+    this.loadCategories();
+    this.loadSubCategories();
+    this.loadChildCategories();
+  }
+
+  onCategorySelected(event: any) {
+    const selectedCategory = this.productForm.value.Category;
+    if (selectedCategory) {
+      this.productForm.patchValue({ SubCategory: '', ChildCategory: '' });
+      this.getSubCategoriesbyCategory(selectedCategory);
+    }
+  }
+
+  getSubCategoriesbyCategory(selectedCategory: string) {
+    if (selectedCategory) {
+      this.subCategories = JSON.parse(localStorage.getItem('subCategories') || '[]');
+      this.subCategories = this.subCategories.filter((subCategory: any) => {
+        return subCategory.Category === selectedCategory;
+      });
+      if (this.subCategories.length > 0) {
+        this.onSubCategorySelected({ target: { value: Number(this.subCategories[0]?.Id.toString()) } });
+      } else {
+        this.childCategories = [];
+        this.productForm.patchValue({ SubCategory: '', ChildCategory: '' });
+      }
+    } else {
+      this.subCategories = [];
+      this.childCategories = [];
+      this.productForm.patchValue({ SubCategory: '', ChildCategory: '' });
+    }
+  }
+
+  onSubCategorySelected(event: any) {
+    const selectedSubCategory = this.productForm.value.SubCategory;
+    if (selectedSubCategory) {
+      this.getChildCategoriesbySubCategory(selectedSubCategory);
+    }
+  }
+
+  getChildCategoriesbySubCategory(selectedSubCategory: string) {
+    if (selectedSubCategory) {
+      this.childCategories = JSON.parse(localStorage.getItem('childCategories') || '[]');
+      this.childCategories = this.childCategories.filter((childCategory: any) => {
+        return childCategory.SubCategory === selectedSubCategory;
+      });
+    } else {
+      this.childCategories = [];
+      this.productForm.patchValue({ ChildCategory: '' });
+    }
+  }
+
+  onchildCategorySelected(event: any) {
+  }
+
+  loadCategories() {
+    this.categoryService.getAll().subscribe((categories: any) => {
+      localStorage.setItem('categories', JSON.stringify(categories));
+      this.categories = categories;
+    });
+  } 
+
+  loadSubCategories() {
+    this.subCategoryService.getAll().subscribe((subCategories: any) => {
+      localStorage.setItem('subCategories', JSON.stringify(subCategories));
+      this.subCategories = subCategories;
+    });
+  }
+
+  loadChildCategories() {
+    this.childCategoryService.getAll().subscribe((childCategories: any) => {
+      localStorage.setItem('childCategories', JSON.stringify(childCategories));
+      this.childCategories = childCategories;
+    });
+  }
+
+  hideSubCategory() {
+    return this.subCategories.length > 0 && this.productForm.value.Category !== '';
+  }
+
+  hideChildCategory() {
+    return this.childCategories.length > 0 && this.productForm.value.SubCategory !== '';
   }
 
   fillForm() {
@@ -90,29 +186,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
     this.productForm.setErrors(null);
     this.productForm.patchValue({
       File: this.product.ThumnailImage || '',
-      Name: this.product.Name,
-      Slug: this.product.Slug,
-      Category: this.product.Category,
-      SubCategory: this.product.SubCategory,
-      ChildCategory: this.product.ChildCategory,
-      Brand: this.product.Brand,
-      SKU: this.product.SKU,
-      Price: this.product.Price,
-      OfferPrice: this.product.OfferPrice,
-      StockQuantity: this.product.StockQuantity,
-      Weight: this.product.Weight,
-      ShortDescription: this.product.ShortDescription,
-      LongDescription: this.product.LongDescription,
-      Highlight: {
-        TopProduct: this.product.Highlight.TopProduct,
-        NewArrival: this.product.Highlight.NewArrival,
-        BestProduct: this.product.Highlight.BestProduct,
-        FeaturedProduct: this.product.Highlight.FeaturedProduct
-      },
-      Status: this.product.Status,
-      SEOTitle: this.product.SEOTitle,
-      SEODescription: this.product.SEODescription,
-      SpecificationStatus: this.product.SpecificationStatus
+      ...this.product,
     });
   }
 
@@ -153,8 +227,25 @@ export class AddProductComponent implements OnDestroy, OnInit {
     if (this.productForm.valid) {
       // Logic to save the product
       console.log('Product saved:', this.productForm.value);
+      const options = {
+        ...this.productForm.value,
+        Vendor: '1',
+        ThumnailImage: this.productForm.value.File || this.product.ThumnailImage,
+        Category: Number(this.productForm.value.Category),
+        SubCategory: Number(this.productForm.value.SubCategory),
+        ChildCategory: Number(this.productForm.value.ChildCategory),
+        Brand: Number(this.productForm.value.Brand),
+        Price: Number(this.productForm.value.Price),
+        OfferPrice: Number(this.productForm.value.OfferPrice),
+        StockQuantity: Number(this.productForm.value.StockQuantity),
+        Weight: Number(this.productForm.value.Weight),
+        file: this.productForm.value.File,
+      };
+      delete options.File;
+      delete options.SpecificationStatus;
+      delete options.Id;
       // You can call a service to save the product here
-      this.productService.createProduct(this.productForm.value).subscribe(
+      this.productService.createProduct(options).subscribe(
         (response: any) => {
           console.log('Product created successfully:', response);
           // Handle success, e.g., navigate to product list or show a success message
@@ -179,11 +270,17 @@ export class AddProductComponent implements OnDestroy, OnInit {
   }
 
   editProduct() {
+    console.log('Editing product:', this.productForm);
     if (this.productForm.valid) {
-      // Logic to edit the product
-      console.log('Product edited:', this.productForm.value);
-      // You can call a service to update the product here
-      this.productService.updateProduct(this.product._id, this.productForm.value).subscribe(
+      const options = {
+        ...this.productForm.value,
+        Id: Number(this.productForm.value.Id),
+        Vendor: '1',
+        ThumnailImage: this.productForm.value.File || this.product.ThumnailImage // Use existing image if no new file is selected
+      };
+      delete options.File;
+      delete options.SpecificationStatus;
+      this.productService.updateProduct(this.product._id, options).subscribe(
         (response: any) => {
           console.log('Product updated successfully:', response);
           // Handle success, e.g., navigate to product list or show a success message

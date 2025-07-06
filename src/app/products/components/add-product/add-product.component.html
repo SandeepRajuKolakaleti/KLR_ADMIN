@@ -8,8 +8,8 @@
                         <h2 class="content-title" *ngIf="editFlow">Edit Product</h2>
                         <div>
                             <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
-                            <button class="btn btn-md rounded font-sm hover-up" *ngIf="!editFlow" (click)="productForm.valid ? saveProduct() : null">Save</button>
-                            <button class="btn btn-primary btn-md rounded font-sm hover-up" *ngIf="editFlow" (click)="productForm.valid ? editProduct() : null">Edit</button>
+                            <button class="btn btn-md rounded font-sm hover-up" *ngIf="!editFlow" (click)="saveProduct()">Save</button>
+                            <button class="btn btn-primary btn-md rounded font-sm hover-up" *ngIf="editFlow" (click)="editProduct()">Edit</button>
                         </div>
                     </div>
                 </div>
@@ -179,24 +179,30 @@
                                 <div class="mb-4 row">
                                     <div class="col-lg-12">
                                         <label class="form-label">Category</label>
-                                        <select formControlName="Category" class="form-select">
-                                            <option>Select Category</option>
+                                        <select formControlName="Category" class="form-select" (change)="onCategorySelected($event)">
+                                            <option *ngFor="let category of categories" [value]="category.Id">
+                                                {{ category.Name }}
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="mb-4 row">
+                                <div class="mb-4 row" *ngIf="hideSubCategory()">
                                     <div class="col-lg-12">
                                         <label class="form-label">Sub-Category</label>
-                                        <select formControlName="SubCategory" class="form-select">
-                                            <option>Select Sub Category</option>
+                                        <select formControlName="SubCategory" class="form-select" (change)="onSubCategorySelected($event)">
+                                            <option *ngFor="let subCategory of subCategories" [value]="subCategory.Id">
+                                                {{ subCategory.Name }}
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="mb-4 row">
+                                <div class="mb-4 row" *ngIf="hideChildCategory()">
                                     <div class="col-lg-12">
                                         <label class="form-label">Child Category</label>
-                                        <select formControlName="ChildCategory" class="form-select">
-                                            <option>Select Child Category</option>
+                                        <select formControlName="ChildCategory" class="form-select" (change)="onchildCategorySelected($event)">
+                                            <option *ngFor="let childCategory of childCategories" [value]="childCategory.Id">
+                                                {{ childCategory.Name }}
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

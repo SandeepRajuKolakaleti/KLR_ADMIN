@@ -36,7 +36,7 @@ export class ProductService {
     });
   }
   updateProduct(id: string, product: any) {
-    return this.http.put(environment.api.URL+`api/products/update-product`, product, {
+    return this.http.post(environment.api.URL+`api/products/update-product`, product, {
       headers: this.getHeaders()
     });
   }
@@ -45,7 +45,7 @@ export class ProductService {
       headers: this.getHeaders()
     });
   }
-  uploadImageToBase64(payload: any) {
+  getImageToBase64(payload: any) {
     return this.http.post(environment.api.URL+'api/products/uploadImgToBase64', payload, {
       headers: this.getHeaders()
     });
