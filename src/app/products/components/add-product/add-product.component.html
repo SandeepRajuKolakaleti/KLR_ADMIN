@@ -130,8 +130,7 @@
                                                 <mat-form-field appearance="fill">
                                                     <mat-select formControlName="key"
                                                             placeholder="key">
-                                                        <mat-option value="color">color</mat-option>
-                                                        <mat-option value="size">size</mat-option>
+                                                        <mat-option *ngFor="let specKey of SpecificationsKeysList" [value]="specKey">{{specKey}}</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                                 <mat-form-field appearance="fill">

@@ -35,7 +35,7 @@ export class ProductService {
       headers: this.getHeaders()
     });
   }
-  updateProduct(id: string, product: any) {
+  updateProduct(product: any) {
     return this.http.post(environment.api.URL+`api/products/update-product`, product, {
       headers: this.getHeaders()
     });

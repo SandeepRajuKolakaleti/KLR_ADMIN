@@ -95,7 +95,17 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   delete(element: any, event: any) {
     event.preventDefault();
     event.stopPropagation();
-    console.log(element)
+    console.log(element);
+    this.productService.deleteProduct(element.Id).subscribe((response: any) => {
+      console.log('Product deleted successfully:', response);
+      // Optionally, refresh the product list or remove the deleted product from the UI
+      this.products = this.products.filter(product => product.position !== element.position);
+      this.ELEMENT_DATA = this.ELEMENT_DATA.filter(item => item.position !== element.position);
+      this.dataSource.data = this.ELEMENT_DATA;
+    }, (error: any) => {
+      console.error('Error deleting product:', error);
+      // Handle error appropriately, e.g., show a notification or alert
+    });
   }
 
   createNewProduct() {

@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from 'src/app/categories/services/category.service';
 import { SubCategoryService } from 'src/app/categories/services/sub-category.service';
 import { ChildCategoryService } from 'src/app/categories/services/child-category.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-product',
@@ -46,12 +47,15 @@ export class AddProductComponent implements OnDestroy, OnInit {
   categories: any[] = [];
   subCategories: any[] = [];
   childCategories: any[] = [];
+  SpecificationsKeysList: string[] = [];
   constructor(private fb: FormBuilder, 
     private route: ActivatedRoute, 
+    private router: Router,
     private productService:ProductService,
     private categoryService: CategoryService,
     private subCategoryService: SubCategoryService,
-    private childCategoryService: ChildCategoryService
+    private childCategoryService: ChildCategoryService,
+    private snackBar: MatSnackBar
   ) {}
   ngOnInit() {
     this.productForm = this.fb.group({
@@ -188,6 +192,17 @@ export class AddProductComponent implements OnDestroy, OnInit {
       File: this.product.ThumnailImage || '',
       ...this.product,
     });
+    this.productForm.controls['SpecificationStatus'].setValue(true);
+    this.product.Specifications.forEach((spec: any) => {
+      this.SpecificationsKeysList.push(spec.key);
+      const specificationForm = this.fb.group({
+        key: [spec.key, Validators.required],
+        specification: [spec.specification, Validators.required]
+      });
+      this.Specifications.push(specificationForm);
+    });
+    this.productForm.markAsDirty();
+    this.productForm.markAsTouched();
   }
 
   onFileSelected(event: Event): void {
@@ -249,6 +264,10 @@ export class AddProductComponent implements OnDestroy, OnInit {
         (response: any) => {
           console.log('Product created successfully:', response);
           // Handle success, e.g., navigate to product list or show a success message
+          this.snackBar.open('Product created successfully!', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success']
+          });
         },
         (error: any) => {
           console.error('Error creating product:', error);
@@ -270,20 +289,43 @@ export class AddProductComponent implements OnDestroy, OnInit {
   }
 
   editProduct() {
-    console.log('Editing product:', this.productForm);
+    console.log('Editing product:', this.productForm.value);
     if (this.productForm.valid) {
-      const options = {
-        ...this.productForm.value,
-        Id: Number(this.productForm.value.Id),
-        Vendor: '1',
-        ThumnailImage: this.productForm.value.File || this.product.ThumnailImage // Use existing image if no new file is selected
-      };
-      delete options.File;
-      delete options.SpecificationStatus;
-      this.productService.updateProduct(this.product._id, options).subscribe(
+      const formData = new FormData();
+      formData.append('ThumnailImage', '');
+      formData.append('Id', this.productForm.controls['Id'].value);
+      formData.append('Name', this.productForm.controls['Name'].value);
+      formData.append('Slug', this.productForm.controls['Slug'].value);
+      formData.append('Status', this.productForm.controls['Status'].value);
+      formData.append('Category', this.productForm.controls['Category'].value);
+      formData.append('SubCategory', this.productForm.controls['SubCategory'].value);
+      formData.append('ChildCategory', this.productForm.controls['ChildCategory'].value);
+      formData.append('Brand', this.productForm.controls['Brand'].value);
+      formData.append('SKU', this.productForm.controls['SKU'].value);
+      formData.append('Price', this.productForm.controls['Price'].value);
+      formData.append('OfferPrice', this.productForm.controls['OfferPrice'].value);
+      formData.append('StockQuantity', this.productForm.controls['StockQuantity'].value);
+      formData.append('Weight', this.productForm.controls['Weight'].value);
+      formData.append('ShortDescription', this.productForm.controls['ShortDescription'].value);
+      formData.append('LongDescription', this.productForm.controls['LongDescription'].value);
+      formData.append('SEOTitle', this.productForm.controls['SEOTitle'].value);
+      formData.append('SEODescription', this.productForm.controls['SEODescription'].value);
+      console.log('Highlight:', this.productForm.controls['Highlight'].value);
+      formData.append('Highlight', JSON.stringify(this.productForm.controls['Highlight'].value));
+      console.log('Specifications:', JSON.stringify(this.Specifications.value));
+      formData.append('Specifications', JSON.stringify(this.Specifications.value));
+      if (this.productForm.controls['File'].value) {
+        formData.append('file', this.productForm.controls['File'].value);
+      }
+      this.productService.updateProduct(formData).subscribe(
         (response: any) => {
           console.log('Product updated successfully:', response);
           // Handle success, e.g., navigate to product list or show a success message
+          this.snackBar.open('Product updated successfully!', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success']
+          });
+          this.router.navigate(['products']);
         },
         (error: any) => {
           console.error('Error updating product:', error);
