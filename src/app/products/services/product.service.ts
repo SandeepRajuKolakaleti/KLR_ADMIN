@@ -20,6 +20,18 @@ export class ProductService {
       return headersRequest;
     }
   }
+
+  getFormDataHeaders(): any {
+    const apiToken = localStorage.getItem('ApiToken');
+    if (apiToken) {
+      const token = JSON.parse(apiToken).access_token_local;
+      const headersRequest = {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+      };
+      return headersRequest;
+    }
+  }
   getProducts() {
     return this.http.get(environment.api.URL+'api/products/getAll', {
       headers: this.getHeaders()
@@ -32,12 +44,12 @@ export class ProductService {
   }
   createProduct(product: any) {
     return this.http.post(environment.api.URL+'api/products/create-product', product, {
-      headers: this.getHeaders()
+      headers: this.getFormDataHeaders()
     });
   }
   updateProduct(product: any) {
     return this.http.post(environment.api.URL+`api/products/update-product`, product, {
-      headers: this.getHeaders()
+      headers: this.getFormDataHeaders()
     });
   }
   deleteProduct(id: string) {
@@ -48,6 +60,14 @@ export class ProductService {
   getImageToBase64(payload: any) {
     return this.http.post(environment.api.URL+'api/products/uploadImgToBase64', payload, {
       headers: this.getHeaders()
+    });
+  }
+
+  uploadXlsFile(file: any) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(environment.api.URL+'api/products/upload/excel', formData, {
+      headers: this.getFormDataHeaders()
     });
   }
   

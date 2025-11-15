@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
@@ -30,7 +30,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
   @ViewChild(MatPaginator) private paginator!: MatPaginator;
-
+  @ViewChild('fileInput') fileInput!: ElementRef;
   constructor(private router: Router, private productService: ProductService) {}
 
   ngOnInit() {
@@ -128,9 +128,51 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     saveAs(data, 'products.xlsx');
   }
 
-  importProducts() {
-    console.log('import products');
-    // Implement import logic here
+  importClick() {
+    this.fileInput.nativeElement.click();
+  }
+
+  importProducts(event: any): void {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) {
+      alert('Please select a single file.');
+      return;
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      console.log('Imported Data:', data);
+      // TODO: Process and save file data
+      this.productService.uploadXlsFile(target.files[0]).subscribe((response: any) => {
+        console.log('File uploaded successfully:', response);
+        // Optionally, refresh the product list or update the UI with the new data
+        this.productService.getProducts().subscribe((data: any) => {
+          console.log('Products fetched successfully after import:', data);
+          this.products = data;
+          this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+            position: index + 1,
+            name: item.Name,
+            image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
+            price: item.Price,
+            status: item.Status,
+            date: new Date(item.createdAt).toLocaleDateString(),
+            ...item
+          }));
+          this.dataSource.data = this.ELEMENT_DATA;
+        }, (error: any) => {
+          console.error('Error fetching products after import:', error);
+          // Handle error appropriately, e.g., show a notification or alert
+        });
+      }, (error: any) => {
+        console.error('Error uploading file:', error);
+        // Handle error appropriately, e.g., show a notification or alert
+      });
+    };
+    reader.readAsBinaryString(target.files[0]);
   }
   viewProduct(element: any, event: any) {
     event.preventDefault();
