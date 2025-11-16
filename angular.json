@@ -66,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "klr-admin:build:production"
+              "buildTarget": "klr-admin:build:production"
             },
             "development": {
-              "browserTarget": "klr-admin:build:development"
+              "buildTarget": "klr-admin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +77,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "klr-admin:build"
+            "buildTarget": "klr-admin:build"
           }
         },
         "test": {
