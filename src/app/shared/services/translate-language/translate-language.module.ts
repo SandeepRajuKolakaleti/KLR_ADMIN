@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { forkJoin, map } from 'rxjs';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -28,22 +28,19 @@ export class MultiHttpLoader implements TranslateLoader {
 //   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 // }
 
-@NgModule({
-  declarations: [],
+@NgModule({ declarations: [],
+  exports: [
+      TranslateModule
+  ], 
   imports: [
     CommonModule,
-    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
-        provide: TranslateLoader,
-        useClass: MultiHttpLoader,
-        deps: [HttpClient]
+          provide: TranslateLoader,
+          useClass: MultiHttpLoader,
+          deps: [HttpClient]
       }
-    })
-  ],
-  exports: [
-    HttpClientModule,
-    TranslateModule
-  ]
+  })], 
+  providers: [provideHttpClient(withInterceptorsFromDi())] 
 })
 export class TranslateLanguageModule { }
