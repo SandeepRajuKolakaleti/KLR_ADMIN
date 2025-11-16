@@ -15,9 +15,10 @@ export interface Category {
   Status: false
 }
 @Component({
-  selector: 'app-categories',
-  templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.scss']
+    selector: 'app-categories',
+    templateUrl: './categories.component.html',
+    styleUrls: ['./categories.component.scss'],
+    standalone: false
 })
 export class CategoriesComponent implements OnInit, AfterViewInit {
   ELEMENT_DATA: Category[] = [];

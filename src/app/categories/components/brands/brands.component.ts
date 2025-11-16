@@ -15,9 +15,10 @@ export interface Brand {
   Status: false
 }
 @Component({
-  selector: 'app-brands',
-  templateUrl: './brands.component.html',
-  styleUrls: ['./brands.component.scss']
+    selector: 'app-brands',
+    templateUrl: './brands.component.html',
+    styleUrls: ['./brands.component.scss'],
+    standalone: false
 })
 export class BrandsComponent {
   ELEMENT_DATA: Brand[] = [];

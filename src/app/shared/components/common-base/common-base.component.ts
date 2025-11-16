@@ -4,9 +4,10 @@ import { StorageService } from '../../services/storage/storage.service';
 import { TranslateConfigService } from '../../services/translate/translate-config.service';
 
 @Component({
-  selector: 'app-common-base',
-  templateUrl: './common-base.component.html',
-  styleUrls: ['./common-base.component.scss']
+    selector: 'app-common-base',
+    templateUrl: './common-base.component.html',
+    styleUrls: ['./common-base.component.scss'],
+    standalone: false
 })
 export class CommonBaseComponent implements OnInit {
 

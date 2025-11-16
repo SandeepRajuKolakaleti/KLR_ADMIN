@@ -5,9 +5,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-vendors',
-  templateUrl: './vendors.component.html',
-  styleUrls: ['./vendors.component.scss']
+    selector: 'app-vendors',
+    templateUrl: './vendors.component.html',
+    styleUrls: ['./vendors.component.scss'],
+    standalone: false
 })
 export class VendorsComponent implements OnInit, AfterViewInit {
 ELEMENT_DATA: any[] = [

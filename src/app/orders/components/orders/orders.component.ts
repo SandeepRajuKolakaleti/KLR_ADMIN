@@ -6,9 +6,10 @@ import { Router } from '@angular/router';
 import { PeriodicElement } from '../../../products/components/products/products.component';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss']
+    selector: 'app-orders',
+    templateUrl: './orders.component.html',
+    styleUrls: ['./orders.component.scss'],
+    standalone: false
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
 ELEMENT_DATA = [

@@ -20,9 +20,10 @@ export interface ChildCategory {
   Status: false
 }
 @Component({
-  selector: 'app-child-categories',
-  templateUrl: './child-categories.component.html',
-  styleUrls: ['./child-categories.component.scss']
+    selector: 'app-child-categories',
+    templateUrl: './child-categories.component.html',
+    styleUrls: ['./child-categories.component.scss'],
+    standalone: false
 })
 export class ChildCategoriesComponent {
   ELEMENT_DATA: ChildCategory[] = [];

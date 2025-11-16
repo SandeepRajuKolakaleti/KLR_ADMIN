@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-vendor-detail',
-  templateUrl: './vendor-detail.component.html',
-  styleUrls: ['./vendor-detail.component.scss']
+    selector: 'app-vendor-detail',
+    templateUrl: './vendor-detail.component.html',
+    styleUrls: ['./vendor-detail.component.scss'],
+    standalone: false
 })
 export class VendorDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}

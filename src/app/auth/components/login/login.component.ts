@@ -12,9 +12,10 @@ import { TranslateConfigService } from '../../../shared/services/translate/trans
 import { CommonBaseComponent } from 'src/app/shared/components/common-base/common-base.component';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent extends CommonBaseComponent implements OnInit {
   showSpinner: boolean = false;
