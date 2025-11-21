@@ -74,7 +74,7 @@ export class ChildCategoriesComponent {
 
   getAllSubCategories() {
     console.log(this.selectedCategory);
-    this.subCategoryService.getSubCategoriesById(this.selectedCategory).subscribe((data) => {
+    this.subCategoryService.getSubCategoriesByCategoryId(this.selectedCategory).subscribe((data) => {
       console.log(data);
       this.subCategories = data;
     })
