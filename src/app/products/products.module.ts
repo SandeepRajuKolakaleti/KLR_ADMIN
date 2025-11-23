@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ProductsComponent } from './components/products/products.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { ProductService } from './services/product.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -12,6 +13,7 @@ import { ProductService } from './services/product.service';
   declarations: [ProductsComponent, AddProductComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     ProductRoutingModule,
     SharedModule
   ],

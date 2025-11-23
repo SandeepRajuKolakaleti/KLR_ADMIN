@@ -8,6 +8,7 @@ import { forkJoin, map } from 'rxjs';
 import { AppConstants } from 'src/app/app.constants';
 import { CategoryService } from '../../services/category.service';
 import { SubCategoryService } from '../../services/sub-category.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface SubCategory {
   Id: number,
   ThumnailImage: String,
@@ -36,7 +37,7 @@ export class SubCategoriesComponent {
   selectedCategory = 0;
 
   constructor(private router: Router, private subCategoryService: SubCategoryService, private fb: FormBuilder,
-    private categoryService: CategoryService
+    private categoryService: CategoryService, private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -139,6 +140,10 @@ export class SubCategoriesComponent {
     this.subCategoryService.delete(element.Id).subscribe((data) => {
       if (data) {
         this.getAll();
+        this.snackBar.open('sub category deleted successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
       }
     });
   }
@@ -155,6 +160,10 @@ export class SubCategoriesComponent {
     this.subCategoryService.create(formData).subscribe((data) => {
       console.log(data);
       this.getAll();
+      this.snackBar.open('sub category added successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
     });
   }
 
@@ -196,6 +205,16 @@ export class SubCategoriesComponent {
       this.subCategoryFrom.reset();
       this.imgSrc = AppConstants.image.uploadDefault;
       this.isCreateFlow = true;
+      this.snackBar.open('sub category updated successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
     });
+  }
+
+  reset() {
+    this.subCategoryFrom.reset();
+    this.imgSrc = AppConstants.image.uploadDefault;
+    this.isCreateFlow = true;
   }
 }

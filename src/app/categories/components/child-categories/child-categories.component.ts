@@ -10,6 +10,7 @@ import { SubCategoryService } from '../../services/sub-category.service';
 import { CategoryService } from '../../services/category.service';
 import { ChildCategoryService } from '../../services/child-category.service';
 import { forkJoin, map } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface ChildCategory {
   Id: number,
   ThumnailImage: String,
@@ -41,7 +42,7 @@ export class ChildCategoriesComponent {
   selectedSubCategory = 0;
 
   constructor(private router: Router, private subCategoryService: SubCategoryService, private fb: FormBuilder,
-    private categoryService: CategoryService, private childCategoryService: ChildCategoryService
+    private categoryService: CategoryService, private childCategoryService: ChildCategoryService, private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -164,6 +165,10 @@ export class ChildCategoriesComponent {
     this.childCategoryService.delete(element.Id).subscribe((data) => {
       if (data) {
         this.getAll();
+        this.snackBar.open('child category deleted successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
       }
     });
   }
@@ -181,6 +186,10 @@ export class ChildCategoriesComponent {
     this.childCategoryService.create(formData).subscribe((data) => {
       console.log(data);
       this.getAll();
+      this.snackBar.open('child category added successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
     });
   }
 
@@ -223,6 +232,16 @@ export class ChildCategoriesComponent {
       this.childCategoryFrom.reset();
       this.imgSrc = AppConstants.image.uploadDefault;
       this.isCreateFlow = true;
+      this.snackBar.open('child category updated successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
     });
+  }
+
+  reset() {
+    this.childCategoryFrom.reset();
+    this.imgSrc = AppConstants.image.uploadDefault;
+    this.isCreateFlow = true;
   }
 }

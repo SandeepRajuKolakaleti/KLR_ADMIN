@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { BrandsService } from '../../services/brands.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface Brand {
   Id: number,
   ThumnailImage: String,
@@ -31,7 +32,8 @@ export class BrandsComponent {
 
   brandFrom!: FormGroup;
 
-  constructor(private router: Router, private brandService: BrandsService, private fb: FormBuilder) {}
+  constructor(private router: Router, private brandService: BrandsService, private fb: FormBuilder,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.brandFrom = this.fb.group({
@@ -121,6 +123,10 @@ export class BrandsComponent {
     console.log(element);
     this.brandService.delete(element.Id).subscribe((data) => {
       if (data) {
+        this.snackBar.open('brand delete successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
         this.getAll();
       }
     });
@@ -136,6 +142,10 @@ export class BrandsComponent {
     formData.append('file', this.brandFrom.get('File')?.value);
     this.brandService.create(formData).subscribe((data) => {
       console.log(data);
+      this.snackBar.open('brand added successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
       this.getAll();
     });
   }
@@ -173,10 +183,20 @@ export class BrandsComponent {
     }
     this.brandService.update(formData).subscribe((data: any) => {
       console.log(data);
+      this.snackBar.open('brands updated successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
       this.getAll();
       this.brandFrom.reset();
       this.imgSrc = AppConstants.image.uploadDefault;
       this.isCreateFlow = true;
     });
+  }
+
+  reset() {
+    this.brandFrom.reset();
+    this.imgSrc = AppConstants.image.uploadDefault;
+    this.isCreateFlow = true;
   }
 }

@@ -1,8 +1,12 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
+import { VendorService } from '../../services/vendor.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'app-vendors',
@@ -11,30 +15,40 @@ import { Router } from '@angular/router';
     standalone: false
 })
 export class VendorsComponent implements OnInit, AfterViewInit {
-ELEMENT_DATA: any[] = [
-    {position: 1, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'raju', email: "sandeep@test.com", status: 'H', date: '2-2-2020'},
-    {position: 2, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'rani', email: "sandeep@test.com", status: 'He', date: '2-2-2020'},
-    {position: 3, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'mukesh', email: "sandeep@test.com", status: 'Li', date: '2-2-2020'},
-    {position: 4, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'nilesh',email: "sandeep@test.com", status: 'Be', date: '2-2-2020'},
-    {position: 1, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'yeshwant', email: "sandeep@test.com", status: 'H', date: '2-2-2020'},
-    {position: 2, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Helium', email: "sandeep@test.com", status: 'He', date: '2-2-2020'},
-    {position: 3, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Lithium', email: "sandeep@test.com", status: 'Li', date: '2-2-2020'},
-    {position: 4, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Beryllium', email: "sandeep@test.com", status: 'Be', date: '2-2-2020'},
-    {position: 1, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Hydrogen', email: "sandeep@test.com", status: 'H', date: '2-2-2020'},
-    {position: 2, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Helium', email: "sandeep@test.com", status: 'He', date: '2-2-2020'},
-    {position: 3, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Lithium', email: "sandeep@test.com", status: 'Li', date: '2-2-2020'},
-    {position: 4, image: 'https://tse1.mm.bing.net/th?id=OIP.S3ZNdZVENtccAG7Ys6ljdwHaEK&pid=Api&P=0&h=220', name: 'Beryllium', email: "sandeep@test.com", status: 'Be', date: '2-2-2020'},
-  ];
-
-  displayedColumns: string[] = ['select', 'position', 'image', 'name', 'email', 'status', 'date', 'action'];
+  ELEMENT_DATA: any[] = [];
+  vendors: any[] = [];
+  displayedColumns: string[] = ['select', 'image', 'name', 'email', 'address', 'action'];
   dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
   selection = new SelectionModel<any>(true, []);
   @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private vendorService: VendorService, 
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
+    this.getVendors();
+  }
 
+  getVendors() {
+    this.vendorService.getVendors().subscribe((data: any) => {
+      console.log('Vendors fetched successfully:', data);
+      this.vendors = data;
+      this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+        position: index + 1,
+        name: item.Name,
+        image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
+        email: item.Email,
+        address: item.Address,
+        date: new Date(item.createdAt).toLocaleDateString(),
+        ...item
+      }));
+      this.dataSource.data = this.ELEMENT_DATA;
+    }, (error: any) => {
+      console.error('Error fetching products:', error);
+      // Handle error appropriately, e.g., show a notification or alert
+    });
+    this.dataSource.paginator = this.paginator;
   }
 
   ngAfterViewInit() {
@@ -67,12 +81,107 @@ ELEMENT_DATA: any[] = [
     event.preventDefault();
     event.stopPropagation();
     console.log(element);
-    this.router.navigate(['vendors/vendor-detail', { data: JSON.stringify(element)}]);
+    //this.router.navigate(['vendors/vendor-detail', { data: JSON.stringify(element)}]);
+    this.router.navigate(['vendors/vendor-detail/'+ element.Id]);
+    // {
+    //   data: element.Id,
+    //   querParams: JSON.stringify({ id: element.Id })
+    // }
+  }
+
+  addVendor() {
+    this.router.navigate(['vendors/add-vendor']);
+  }
+
+  editVendor(element: any, event: any) {
+    console.log(element)
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "data": JSON.stringify({ vendor: element })
+      }
+    };
+    this.router.navigate(['vendors/add-vendor'], navigationExtras);
   }
 
   delete(element: any, event: any) {
     event.preventDefault();
     event.stopPropagation();
     console.log(element)
+    this.vendorService.delete(element.Id).subscribe((data: any) => {
+      console.log('Vendor deleted successfully:', data);
+      this.getVendors();
+      this.snackBar.open('Vendor deleted successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
+    });
+  }
+
+  exportVendors() {
+    console.log('export vendors');
+    // Implement export logic here
+    this.exportToExcel();
+  }
+
+  exportToExcel() {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.vendors);
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Vendors');
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'vendors.xlsx');
+  }
+
+  importClick() {
+    this.fileInput.nativeElement.click();
+  }
+
+  importProducts(event: any): void {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) {
+      alert('Please select a single file.');
+      return;
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      console.log('Imported Data:', data);
+      // TODO: Process and save file data
+      this.vendorService.uploadXlsFile(target.files[0]).subscribe((response: any) => {
+        console.log('File uploaded successfully:', response);
+        // Optionally, refresh the product list or update the UI with the new data
+        this.vendorService.getVendors().subscribe((data: any) => {
+          console.log('Vendors fetched successfully after import:', data);
+          this.vendors = data;
+          this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+            position: index + 1,
+            name: item.Name,
+            image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
+            price: item.Price,
+            status: item.Status,
+            date: new Date(item.createdAt).toLocaleDateString(),
+            ...item
+          }));
+          this.dataSource.data = this.ELEMENT_DATA;
+        }, (error: any) => {
+          console.error('Error fetching products after import:', error);
+          // Handle error appropriately, e.g., show a notification or alert
+        });
+      }, (error: any) => {
+        console.error('Error uploading file:', error);
+        // Handle error appropriately, e.g., show a notification or alert
+      });
+    };
+    reader.readAsBinaryString(target.files[0]);
+  }
+  viewVendor(element: any, event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('view vendor', element);
+    this.router.navigate(['vendors/view-vendor', element.Id]);
   }
 }

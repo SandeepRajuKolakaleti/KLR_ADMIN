@@ -9,13 +9,13 @@
                 <div class="row">
                     <div class="col-xl col-lg flex-grow-0" style="flex-basis: 230px">
                         <div class="img-thumbnail shadow w-100 bg-white position-relative text-center" style="height: 190px; width: 200px; margin-top: -120px">
-                            <img src="assets/imgs/brands/vendor-2.png" class="center-xy img-fluid" alt="Logo Brand" />
+                            <img [src]="vendor.ThumnailImage" class="center-xy img-fluid" alt="Logo Brand" />
                         </div>
                     </div>
                     <!--  col.// -->
                     <div class="col-xl col-lg">
-                        <h3>Noodles Co.</h3>
-                        <p>3891 Ranchview Dr. Richardson, California 62639</p>
+                        <h3>{{vendor.Name}}</h3>
+                        <p>{{vendor.Address}}</p>
                     </div>
                     <!--  col.// -->
                     <div class="col-xl-4 text-md-end">
@@ -44,18 +44,17 @@
                     <div class="col-sm-6 col-lg-4 col-xl-3">
                         <h6>Contacts</h6>
                         <p>
-                            Manager: Jerome Bell <br />
-                            info&#64; example.com <br />
-                            (229) 555-0109, (808) 555-0111
+                            Manager: {{vendor.Name}} <br />
+                            {{vendor.Email}} <br />
+                            {{vendor.PhoneNumber}}
                         </p>
                     </div>
                     <!--  col.// -->
                     <div class="col-sm-6 col-lg-4 col-xl-3">
                         <h6>Address</h6>
                         <p>
-                            Country: California <br />
-                            Address: Ranchview Dr. Richardson <br />
-                            Postal code: 62639
+                            Country: India <br />
+                            Address: {{vendor.Address}} <br />
                         </p>
                     </div>
                     <!--  col.// -->
@@ -77,12 +76,12 @@
             <div class="card-body">
                 <h3 class="card-title">Products by seller</h3>
                 <div class="row">
-                    <div class="col-xl-2 col-lg-3 col-md-6">
+                    <div class="col-xl-2 col-lg-3 col-md-6" *ngFor="let product of products">
                         <div class="card card-product-grid">
-                            <a href="#" class="img-wrap"> <img src="assets/imgs/items/1.jpg" alt="Product" /> </a>
+                            <a href="#" class="img-wrap"> <img [src]="product.ThumnailImage?product.ThumnailImage: 'assets/imgs/brands/vendor-2.png'" alt="Product" /> </a>
                             <div class="info-wrap">
-                                <a href="#" class="title">Product name</a>
-                                <div class="price mt-1">$179.00</div>
+                                <a href="#" class="title">{{product.Name}}</a>
+                                <div class="price mt-1">${{product.Price}}</div>
                                 <!-- price-wrap.// -->
                             </div>
                         </div>

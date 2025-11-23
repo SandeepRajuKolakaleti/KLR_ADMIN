@@ -3,10 +3,13 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Vendors List</h2>
-                <p>Lorem ipsum dolor sit amet.</p>
+                <p>total no.of.vendors: 1</p>
             </div>
-            <div>
-                <a href="javascript:void(0)" class="btn btn-light rounded font-md">Export</a>
+            <div class="content-header-btn">
+              <a href="javascript:void(0)" (click)="exportVendors()" class="btn btn-light rounded font-md">Export</a>
+              <a href="javascript:void(0)" class="btn btn-light rounded font-md" (click)="importClick()">Import</a>
+              <input #fileInput type="file" accept=".xls,.xlsx" style="display:none" (change)="importProducts($event)">
+              <a href="javascript:void(0)" (click)="addVendor()"  class="btn btn-primary btn-sm rounded">Create new</a>
             </div>
         </div>
         <div class="card mb-4">
@@ -29,12 +32,6 @@
                     </mat-checkbox>
                   </td>
                 </ng-container>
-              
-                <!-- Position Column -->
-                <ng-container matColumnDef="position">
-                  <th mat-header-cell *matHeaderCellDef> No. </th>
-                  <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                </ng-container>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="image">
@@ -51,31 +48,26 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef> Seller </th>
-                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
                 </ng-container>
               
                 <!-- Price Column -->
                 <ng-container matColumnDef="email">
                   <th mat-header-cell *matHeaderCellDef> Email </th>
-                  <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
                 </ng-container>
               
                 <!-- Status Column -->
-                <ng-container matColumnDef="status">
-                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                  <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-                </ng-container>
-
-                <!-- Date Column -->
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                <ng-container matColumnDef="address">
+                  <th mat-header-cell *matHeaderCellDef> Address </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Address}} </td>
                 </ng-container>
 
                 <!-- Action Column -->
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef> Action </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" class="content-action-btn">
+                        <a href="javascript:void(0)" (click)="editVendor(element, $event)" class="btn btn-sm font-sm rounded btn-brand"><i class="material-icons md-edit"></i> Edit</a>
                         <a href="Javascript:void(0)" (click)="view(element, $event)" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-visibility"></i> View </a>
                         <a href="Javascript:void(0)" (click)="delete(element, $event)" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a>
                     </td>
@@ -90,7 +82,7 @@
         <!-- card end// -->
         <div class="pagination-area mt-30 mb-50">
             <mat-paginator #paginator
-              [pageSizeOptions]="[2,4,6,8,10]" showFirstLastButtons>
+              [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons>
             </mat-paginator>
         </div>
     </section>

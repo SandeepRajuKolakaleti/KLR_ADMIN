@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+.mat-mdc-table tbody, .mat-mdc-table tfoot, .mat-mdc-table thead, .mat-mdc-cell, .mat-mdc-footer-cell, .mat-mdc-header-row, .mat-mdc-row, .mat-mdc-footer-row, .mat-mdc-table .mat-mdc-header-cell {
+    background-color: #fff!important;
+}
+
+body.dark .form-control, body.dark .form-select {
+    color:#000!important;
+}

@@ -3,12 +3,10 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ProductService {
-
+export class VendorService {
   constructor(private http: HttpClient) { }
-
   getHeaders(): any {
     const apiToken = localStorage.getItem('ApiToken');
     if (apiToken) {
@@ -31,33 +29,38 @@ export class ProductService {
       return headersRequest;
     }
   }
-  getProducts() {
-    return this.http.get(environment.api.URL+'api/products/getAll', {
+  getVendors() {
+    return this.http.get(environment.api.URL+'api/vendors/getAll', {
       headers: this.getHeaders()
     });
   }
-  getProductById(id: string) {
-    return this.http.get(environment.api.URL+`api/products/product/${id}`, {
+  getProductsById(id: string) {
+    return this.http.get(environment.api.URL+`api/vendors/productsByVendor/${id}`, {
       headers: this.getHeaders()
     });
   }
-  createProduct(product: any) {
-    return this.http.post(environment.api.URL+'api/products/create-product', product, {
+  getVendorsById(id: string) {
+    return this.http.get(environment.api.URL+`api/vendors/vendor/${id}`, {
+      headers: this.getHeaders()
+    });
+  }
+  create(vendor: any) {
+    return this.http.post(environment.api.URL+'api/vendors/create-vendor', vendor, {
       headers: this.getFormDataHeaders()
     });
   }
-  updateProduct(product: any) {
-    return this.http.post(environment.api.URL+`api/products/update-product`, product, {
+  update(vendor: any) {
+    return this.http.post(environment.api.URL+`api/vendors/update-vendor`, vendor, {
       headers: this.getFormDataHeaders()
     });
   }
-  deleteProduct(id: string) {
-    return this.http.delete(environment.api.URL+`api/products/product/${id}`, {
+  delete(id: string) {
+    return this.http.delete(environment.api.URL+`api/vendors/vendor/${id}`, {
       headers: this.getHeaders()
     });
   }
   getImageToBase64(payload: any) {
-    return this.http.post(environment.api.URL+'api/products/uploadImgToBase64', payload, {
+    return this.http.post(environment.api.URL+'api/vendors/uploadImgToBase64', payload, {
       headers: this.getHeaders()
     });
   }
@@ -65,9 +68,8 @@ export class ProductService {
   uploadXlsFile(file: any) {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(environment.api.URL+'api/products/upload/excel', formData, {
+    return this.http.post(environment.api.URL+'api/vendors/upload/excel', formData, {
       headers: this.getFormDataHeaders()
     });
   }
-  
 }

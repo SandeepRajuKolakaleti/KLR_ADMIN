@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
-import { CategoryService } from 'src/app/categories/services/category.service';
-import { SubCategoryService } from 'src/app/categories/services/sub-category.service';
-import { ChildCategoryService } from 'src/app/categories/services/child-category.service';
+import { CategoryService } from '../../../categories/services/category.service';
+import { SubCategoryService } from '../../../categories/services/sub-category.service';
+import { ChildCategoryService } from '../../../categories/services/child-category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { VendorService } from '../../../vendors/services/vendor.service';
 
 @Component({
     selector: 'app-add-product',
@@ -15,11 +16,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AddProductComponent implements OnDestroy, OnInit {
   productForm!: FormGroup;
+  vendors: any[] = [];
+  selectedFile: File | null = null;
   HighlightPosition = {};
   imgSrc: string | ArrayBuffer | null = 'assets/imgs/theme/upload.svg';
   editFlow: boolean = false;
   sub: any;
   product: any = {
+    Vendor: '',
     File: '',
     Name: '',
     Slug: '',
@@ -53,6 +57,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
     private route: ActivatedRoute, 
     private router: Router,
     private productService:ProductService,
+    private vendorService: VendorService,
     private categoryService: CategoryService,
     private subCategoryService: SubCategoryService,
     private childCategoryService: ChildCategoryService,
@@ -63,7 +68,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
       File: ['', Validators.required],
       // ThmbnailImage: ['', Validators.required],
       Id: [''],
-      Vendor: ['1'],
+      Vendor: ['', Validators.required],
       Name: ['', Validators.required],
       Slug: ['', Validators.required],
       Category: ['', Validators.required],
@@ -101,6 +106,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
     this.loadCategories();
     this.loadSubCategories();
     this.loadChildCategories();
+    this.loadVendors();
   }
 
   onCategorySelected(event: any) {
@@ -135,6 +141,10 @@ export class AddProductComponent implements OnDestroy, OnInit {
     if (selectedSubCategory) {
       this.getChildCategoriesbySubCategory(selectedSubCategory);
     }
+  }
+
+  onVendorSelected(event: any) {
+    const selectedVendor = this.productForm.value.Vendor;
   }
 
   getChildCategoriesbySubCategory(selectedSubCategory: string) {
@@ -173,6 +183,13 @@ export class AddProductComponent implements OnDestroy, OnInit {
     });
   }
 
+  loadVendors() {
+    this.vendorService.getVendors().subscribe((vendors: any) => {
+      localStorage.setItem('vendors', JSON.stringify(vendors));
+      this.vendors = vendors;
+    }); 
+  }
+
   hideSubCategory() {
     return this.subCategories.length > 0 && this.productForm.value.Category !== '';
   }
@@ -189,18 +206,33 @@ export class AddProductComponent implements OnDestroy, OnInit {
     this.productForm.markAsUntouched();
     this.productForm.updateValueAndValidity();
     this.productForm.setErrors(null);
-    this.productForm.patchValue({
-      File: this.product.ThumnailImage || '',
-      ...this.product,
-    });
-    this.productForm.controls['SpecificationStatus'].setValue(true);
-    this.product.Specifications.forEach((spec: any) => {
-      this.SpecificationsKeysList.push(spec.key);
-      const specificationForm = this.fb.group({
-        key: [spec.key, Validators.required],
-        specification: [spec.specification, Validators.required]
+    this.product.Specifications = typeof this.product.Specifications === "string"? JSON.parse(this.product.Specifications): this.product.Specifications;
+    this.productForm.controls['SpecificationStatus'].setValue(this.product.Specifications.length > 0);
+    this.product.Highlight = typeof this.product.Highlight === "string"? JSON.parse(this.product.Highlight): this.product.Highlight;
+    if (this.product.Highlight) {
+      const Highlight = this.product.Highlight;
+      this.productForm.controls['Highlight'].patchValue({
+        TopProduct: Highlight.TopProduct || false,
+        NewArrival: Highlight.NewArrival || false,
+        BestProduct: Highlight.BestProduct || false,
+        FeaturedProduct: Highlight.FeaturedProduct || false
       });
-      this.Specifications.push(specificationForm);
+    }
+    if (this.product.Specifications && this.product.Specifications.length > 0) {
+      this.productForm.controls['SpecificationStatus'].setValue(true);
+      this.product.Specifications.forEach((spec: any) => {
+        this.SpecificationsKeysList.push(spec.key);
+        const specificationForm = this.fb.group({
+          key: [spec.key, Validators.required],
+          specification: [spec.specification, Validators.required]
+        });
+        this.Specifications.push(specificationForm);
+      });
+    }
+    this.productForm.patchValue({
+      // File: this.product.ThumnailImage || '',
+      Vendor: Number(this.product.Vendor) || '',
+      ...this.product,
     });
     this.productForm.markAsDirty();
     this.productForm.markAsTouched();
@@ -220,7 +252,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
       reader.readAsDataURL(file);
   
       // You can also store the file for uploading later
-      // this.selectedFile = file;
+      this.selectedFile = file;
     }
   }
 
@@ -243,25 +275,34 @@ export class AddProductComponent implements OnDestroy, OnInit {
     if (this.productForm.valid) {
       // Logic to save the product
       console.log('Product saved:', this.productForm.value);
-      const options = {
-        ...this.productForm.value,
-        Vendor: '1',
-        ThumnailImage: this.productForm.value.File || this.product.ThumnailImage,
-        Category: Number(this.productForm.value.Category),
-        SubCategory: Number(this.productForm.value.SubCategory),
-        ChildCategory: Number(this.productForm.value.ChildCategory),
-        Brand: Number(this.productForm.value.Brand),
-        Price: Number(this.productForm.value.Price),
-        OfferPrice: Number(this.productForm.value.OfferPrice),
-        StockQuantity: Number(this.productForm.value.StockQuantity),
-        Weight: Number(this.productForm.value.Weight),
-        file: this.productForm.value.File,
-      };
-      delete options.File;
-      delete options.SpecificationStatus;
-      delete options.Id;
+      const formData = new FormData();
+      formData.append('ThumnailImage', '');
+      formData.append('Vendor', this.productForm.controls['Vendor'].value);
+      formData.append('Name', this.productForm.controls['Name'].value);
+      formData.append('Slug', this.productForm.controls['Slug'].value);
+      formData.append('Status', this.productForm.controls['Status'].value);
+      formData.append('Category', this.productForm.controls['Category'].value);
+      formData.append('SubCategory', this.productForm.controls['SubCategory'].value);
+      formData.append('ChildCategory', this.productForm.controls['ChildCategory'].value);
+      formData.append('Brand', this.productForm.controls['Brand'].value);
+      formData.append('SKU', this.productForm.controls['SKU'].value);
+      formData.append('Price', this.productForm.controls['Price'].value);
+      formData.append('OfferPrice', this.productForm.controls['OfferPrice'].value);
+      formData.append('StockQuantity', this.productForm.controls['StockQuantity'].value);
+      formData.append('Weight', this.productForm.controls['Weight'].value);
+      formData.append('ShortDescription', this.productForm.controls['ShortDescription'].value);
+      formData.append('LongDescription', this.productForm.controls['LongDescription'].value);
+      formData.append('SEOTitle', this.productForm.controls['SEOTitle'].value);
+      formData.append('SEODescription', this.productForm.controls['SEODescription'].value);
+      console.log('Highlight:', this.productForm.controls['Highlight'].value);
+      formData.append('Highlight', JSON.stringify(this.productForm.controls['Highlight'].value));
+      console.log('Specifications:', JSON.stringify(this.Specifications.value));
+      formData.append('Specifications', JSON.stringify(this.Specifications.value));
+      if (this.productForm.controls['File'].value) {
+        formData.append('file', this.selectedFile as Blob);
+      }
       // You can call a service to save the product here
-      this.productService.createProduct(options).subscribe(
+      this.productService.createProduct(formData).subscribe(
         (response: any) => {
           console.log('Product created successfully:', response);
           // Handle success, e.g., navigate to product list or show a success message
@@ -269,6 +310,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
             duration: 3000,
             panelClass: ['snackbar-success']
           });
+          this.router.navigate(['products']);
         },
         (error: any) => {
           console.error('Error creating product:', error);
@@ -295,6 +337,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
       const formData = new FormData();
       formData.append('ThumnailImage', '');
       formData.append('Id', this.productForm.controls['Id'].value);
+      formData.append('Vendor', this.productForm.controls['Vendor'].value);
       formData.append('Name', this.productForm.controls['Name'].value);
       formData.append('Slug', this.productForm.controls['Slug'].value);
       formData.append('Status', this.productForm.controls['Status'].value);
@@ -316,7 +359,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
       console.log('Specifications:', JSON.stringify(this.Specifications.value));
       formData.append('Specifications', JSON.stringify(this.Specifications.value));
       if (this.productForm.controls['File'].value) {
-        formData.append('file', this.productForm.controls['File'].value);
+        formData.append('file', this.selectedFile as Blob);
       }
       this.productService.updateProduct(formData).subscribe(
         (response: any) => {

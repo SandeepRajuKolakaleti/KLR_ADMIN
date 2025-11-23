@@ -34,81 +34,87 @@
                                     <option value="0">InActive</option>
                                 </select>
                             </div>
-                            <div class="d-grid">
-                                <button *ngIf="isCreateFlow" (click)="createCategory()" class="btn btn-primary">Create</button>
-                                <button *ngIf="!isCreateFlow" (click)="editCategory()" class="btn btn-primary">Edit</button>
+                            <div class="content-header-btn">
+                                @if(isCreateFlow) {
+                                    <a (click)="createCategory()" class="btn btn-md rounded font-sm hover-up">Create</a>
+                                } @else {
+                                    <a (click)="editCategory()" class="btn btn-md rounded font-sm hover-up">Edit</a>
+                                    <a (click)="reset()" class="btn btn-primary btn-md rounded font-sm hover-up">Reset</a>
+                                }
                             </div>
                         </form>
                     </div>
                     <div class="col-md-9">
                         <div class="table-responsive">
-                            <table mat-table [dataSource]="dataSource" class="category-table mat-elevation-z8">
+                            <div class="card mb-4">
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-                                <!-- Checkbox Column -->
-                                <ng-container matColumnDef="select">
-                                  <th mat-header-cell *matHeaderCellDef>
-                                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                  [checked]="selection.hasValue() && isAllSelected()"
-                                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                  [aria-label]="checkboxLabel()">
-                                    </mat-checkbox>
-                                  </th>
-                                  <td mat-cell *matCellDef="let row">
-                                    <mat-checkbox (click)="$event.stopPropagation()"
-                                                  (change)="$event ? selection.toggle(row) : null"
-                                                  [checked]="selection.isSelected(row)"
-                                                  [aria-label]="checkboxLabel(row)">
-                                    </mat-checkbox>
-                                  </td>
-                                </ng-container>
-                
-                                <!-- Image Column -->
-                                <ng-container matColumnDef="image">
-                                    <th mat-header-cell *matHeaderCellDef> Image </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <a class="itemside" href="javascript:void(0)">
-                                            <div class="left">
-                                                <img src="{{element.ThumnailImage}}" class="img-sm img-thumbnail" alt="Item" />
-                                            </div>
-                                        </a>
+                                    <!-- Checkbox Column -->
+                                    <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                    [checked]="selection.hasValue() && isAllSelected()"
+                                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                    [aria-label]="checkboxLabel()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                    (change)="$event ? selection.toggle(row) : null"
+                                                    [checked]="selection.isSelected(row)"
+                                                    [aria-label]="checkboxLabel(row)">
+                                        </mat-checkbox>
                                     </td>
-                                </ng-container>
-                              
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="name">
-                                  <th mat-header-cell *matHeaderCellDef> Name </th>
-                                  <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
-                                </ng-container>
-                              
-                                <!-- Price Column -->
-                                <ng-container matColumnDef="slug">
-                                  <th mat-header-cell *matHeaderCellDef> Slug </th>
-                                  <td mat-cell *matCellDef="let element"> {{element.Slug}} </td>
-                                </ng-container>
-                              
-                                <!-- Status Column -->
-                                <ng-container matColumnDef="status">
-                                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                                  <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
-                                </ng-container>
-                
-                                <!-- Action Column -->
-                                <ng-container matColumnDef="action">
-                                    <th mat-header-cell *matHeaderCellDef> Action </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <a href="Javascript:void(0)" (click)="edit(element, $event)" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a>
-                                        <a href="Javascript:void(0)" (click)="delete(element, $event)" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a>
-                                    </td>
-                                </ng-container>
-                
-                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumns;sticky: true"
-                                    (click)="selection.toggle(row)">
-                                </tr>
-                            </table>
+                                    </ng-container>
+                    
+                                    <!-- Image Column -->
+                                    <ng-container matColumnDef="image">
+                                        <th mat-header-cell *matHeaderCellDef> Image </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <a class="itemside" href="javascript:void(0)">
+                                                <div class="left">
+                                                    <img src="{{element.ThumnailImage}}" class="img-sm img-thumbnail" alt="Item" />
+                                                </div>
+                                            </a>
+                                        </td>
+                                    </ng-container>
+                                
+                                    <!-- Name Column -->
+                                    <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+                                    </ng-container>
+                                
+                                    <!-- Price Column -->
+                                    <ng-container matColumnDef="slug">
+                                    <th mat-header-cell *matHeaderCellDef> Slug </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.Slug}} </td>
+                                    </ng-container>
+                                
+                                    <!-- Status Column -->
+                                    <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
+                                    </ng-container>
+                    
+                                    <!-- Action Column -->
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                                        <td mat-cell *matCellDef="let element" class="content-action-btn">
+                                            <a href="Javascript:void(0)" (click)="edit(element, $event)" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a>
+                                            <a href="Javascript:void(0)" (click)="delete(element, $event)" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a>
+                                        </td>
+                                    </ng-container>
+                    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;sticky: true"
+                                        (click)="selection.toggle(row)">
+                                    </tr>
+                                </table>
+                            </div>
                             <div class="pagination-area mt-30 mb-50">
                                 <mat-paginator #paginator
-                                  [pageSizeOptions]="[5, 10, 20, 50 ,100]" showFirstLastButtons>
+                                  [pageSizeOptions]="[10, 20, 50 ,100]" showFirstLastButtons>
                                 </mat-paginator>
                             </div>
                         </div>
