@@ -25,10 +25,24 @@
                     <input formControlName="password" class="form-control" placeholder="Password" type="password" />
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Adress</label>
+                    <input formControlName="address" class="form-control" placeholder="Your Address" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Birthday</label>
+                    <input formControlName="birthday" class="form-control" placeholder="Your Birthday" type="date" />
+                </div>
+                <div class="mb-4">
+                    <label for="product_name" class="form-label">Image</label>
+                    <img [src]="imgSrc" alt="" />
+                    <input (change)="onFileSelected($event)" class="form-control" type="file" />
+                </div>
+                <div class="mb-3">
                     <select class="form-select" name="userType" id="userType" formControlName="userType">
-                       <option value="admin">Admin</option>
-                       <option value="vendor">Vendor</option>
-                       <option value="deleveryBoy">Delevery Boy</option>
+                       <option value="{{appConstants.userType.admin}}">Admin</option>
+                       <option value="{{appConstants.userType.user}}">User</option>
+                       <option value="{{appConstants.userType.vendor}}">Vendor</option>
+                       <option value="{{appConstants.userType.deliveryBoy}}">Delevery Boy</option>
                     </select>
                  </div>
                 <!-- form-group// -->

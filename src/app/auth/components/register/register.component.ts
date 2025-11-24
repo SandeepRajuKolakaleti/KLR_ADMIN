@@ -18,6 +18,8 @@ declare let google: any;
 })
 export class RegisterComponent extends CommonBaseComponent implements OnInit {
   registerForm!: FormGroup;
+  appConstants = AppConstants;
+  imgSrc: string | ArrayBuffer | null = AppConstants.image.uploadDefault;
   constructor(private formBuilder: FormBuilder, 
     private authService: AuthService,
     private route: Router,
@@ -78,10 +80,13 @@ export class RegisterComponent extends CommonBaseComponent implements OnInit {
   createFormBuilder() {
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
+      File: [null, Validators.required],
       email: ['', Validators.required],
       phonenumber: ['', Validators.required],
       password: ['', Validators.required],
-      userType: [AppConstants.userType.admin, Validators.required]
+      userType: [AppConstants.userType.admin, Validators.required],
+      address: ['', Validators.required],
+      birthday: ['', Validators.required]
     });
   }
 
@@ -100,12 +105,20 @@ export class RegisterComponent extends CommonBaseComponent implements OnInit {
 			phonenumber: this.registerForm.controls['phonenumber'].value,
 			password: this.registerForm.controls['password'].value,
       userRole: this.registerForm.controls['userType'].value,
-      permissionId: this.permission()
+      file: this.registerForm.controls['File'].value,
+      permissionId: this.permission(),
+      permissionName: this.registerForm.controls['userType'].value,
+      address: this.registerForm.controls['address'] ? this.registerForm.controls['address'].value : '',
+      birthday: this.registerForm.controls['birthday'] ? this.registerForm.controls['birthday'].value : ''
 		}
     console.log(options);
     this.authService.registerApi(options).subscribe((response) => {
       // console.log('****** response: ', response);
-      this.route.navigate(['dashboard']);
+      this.snackBar.open('profile registered successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
+      this.route.navigate(['login']);
     }, (error) => {
       console.log('******error_loginCrApi******', error);
       this.snackBar.open(this.translateService.instant('INVALIDDETAILS'), this.translateService.instant('CLOSE'), AppConstants.SNACK_BAR_DELAY);
@@ -116,11 +129,31 @@ export class RegisterComponent extends CommonBaseComponent implements OnInit {
     const userType = this.registerForm.controls['userType'].value;
     if (userType === AppConstants.userType.admin) {
       return '1';
+    } else if (userType === AppConstants.userType.user) {
+      return '2';
     } else if (userType === AppConstants.userType.vendor) {
       return '3';
     } else {
       return '4';
     }
   } 
+
+   onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0] as Blob;
+  
+      // Show preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imgSrc = reader.result;
+      };
+      this.registerForm.controls['File'].patchValue(file);
+      reader.readAsDataURL(file);
+  
+      // You can also store the file for uploading later
+      // this.selectedFile = file;
+    }
+  }
 
 }

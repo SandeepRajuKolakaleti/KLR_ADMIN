@@ -67,7 +67,7 @@ export class LoginComponent extends CommonBaseComponent implements OnInit {
 			}
 			
 			this.authService.loginApiToken(options).subscribe((response) => {
-				// console.log('****** response: ', response);
+				console.log('****** response: ', response);
 				this.showSpinner = true;
         		this.storageService.set('loggedIn', true);
 				this.storageService.set('ApiToken', response);

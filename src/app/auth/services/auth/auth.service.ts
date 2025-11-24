@@ -37,20 +37,59 @@ export class AuthService {
 	}
 
 	registerApi(options: any): Observable<any> {
-		return this.http.post(this.API_URL+ 'api/users/register', options).pipe(map(data => {
-			return data;
-		}));
+        const blob = new Blob([options.file.buffer], { type: options.file.mimetype });
+        const formData = new FormData();
+        formData.append('image', options.image || '');
+        formData.append('name', options.name);
+        formData.append('email', options.email);
+        formData.append('password', options.password);
+        formData.append('phonenumber', options.phonenumber || '');
+        formData.append('userRole', options.userRole);
+        formData.append('permissionId', options.permissionId ? String(options.permissionId) : '');
+        formData.append('permissionName', options.permissionName ? String(options.permissionName) : '');
+        formData.append('address', options.address ? String(options.address) : '');
+        formData.append('birthday', options.birthday ? String(options.birthday) : '');
+        formData.append('file', blob, options.file.originalname);
+        return this.http.post(this.API_URL + 'api/users/register', formData,{ 
+            headers: { 
+            }
+        }).pipe(
+			map(response => (response as any).data)
+		);
+	}
+
+	updateUserApi(options: any): Observable<any> {
+        const blob = new Blob([options.file.buffer], { type: options.file.mimetype });
+        const formData = new FormData();
+        formData.append('image', options.image || '');
+        formData.append('name', options.name);
+        formData.append('email', options.email);
+        formData.append('password', options.password);
+        formData.append('phonenumber', options.phonenumber || '');
+        formData.append('userRole', options.userRole);
+        formData.append('permissionId', options.permissionId ? String(options.permissionId) : '');
+        formData.append('permissionName', options.permissionName ? String(options.permissionName) : '');
+		formData.append('Id', options.Id ? String(options.Id) : '');
+        formData.append('address', options.address ? String(options.address) : '');
+        formData.append('birthday', options.birthday ? String(options.birthday) : '');
+        formData.append('file', blob, options.file.originalname);
+        return this.http.post(this.API_URL + 'api/users/update', formData,{ 
+            headers: { 
+            }
+        }).pipe(
+			map(response => (response as any).data)
+		);
 	}
 
 	getUserInformation() {
-		const CrApiSessionStorage = this.storageService.get('ApiSession');
-		return this.http.get(this.API_URL+ 'api/users/UserInfo', {
+		const CrApiSessionStorage = this.storageService.get('ApiToken');
+		return this.http.get(this.API_URL+ 'api/users/profile/'+CrApiSessionStorage.id, {
 			headers: this.getAuthorizationHeaders(CrApiSessionStorage),
 		});
 	}
 
 	resetPassword(options: any) {
-		const CrApiSessionStorage = this.storageService.get('ApiSession');
+		const CrApiSessionStorage = this.storageService.get('ApiToken');
 		return this.http.post(this.API_URL + 'api/users/resetPassword', options, {
 		  headers: this.getAuthorizationHeaders(CrApiSessionStorage),
 		}).pipe(map((response: any) => {
@@ -66,7 +105,7 @@ export class AuthService {
 			Authorization: '',
 		};
 		if (data && data !== '') {
-			headers.Authorization = data.token_type + ' ' + data.access_token_local;
+			headers.Authorization = 'Bearer ' + data.access_token_local;
 		}
 		return headers;
 	}
