@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../../../../app/auth/services/auth/auth.service';
 import { TranslateConfigService } from '../../services/translate/translate-config.service';
 import { CommonService } from '../../services/common/common.service';
+import { StorageService } from '../../services/storage/storage.service';
+import { AppConstants } from 'src/app/app.constants';
 declare let $: any;
 
 @Component({
@@ -15,13 +17,17 @@ declare let $: any;
 export class HeaderComponent implements OnInit, AfterViewInit {
 
   isLoggedIn!: Observable<boolean>;
-  constructor(public router: Router, private authService: AuthService, private translateConfigService: TranslateConfigService,private commonService: CommonService) { }
+  apiToken: any;
+  appConstants = AppConstants;
+  constructor(public router: Router, private authService: AuthService, private translateConfigService: TranslateConfigService,private commonService: CommonService, private storageService: StorageService) { }
 
   ngOnInit(): void {
     // console.log('deviceInfo', this.deviceInfo);
     this.isLoggedIn = this.authService.isUserLoggedIn;
     this.authService.isUserLoggedIn.subscribe((data) => {
-      console.log(data);
+      console.log('user LoggedIn:', data);
+      this.apiToken = this.storageService.get('ApiToken');
+      console.log('User', this.apiToken);
       this.commonService.loadScriptsInOrder([
         '/assets/js/vendors/jquery-3.6.0.min.js',
         '/assets/js/vendors/bootstrap.bundle.min.js',
@@ -53,26 +59,40 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.translateConfigService.setSelectedLanguage(lang);
   }
 
-  route(value: string) {
-    if (value === 'dashboard') {
-      this.router.navigate(['dashboard'] );
-    } else if (value === 'profile') {
-      this.router.navigate(['profile'] );
-    } else if (value === 'products') {
-      this.router.navigate(['products'] );
-    } else if (value === 'categories') {
-      this.router.navigate(['categories'] );
-    } else if (value === 'categories/sub-category') {
-      this.router.navigate(['categories/sub-category'] );
-    } else if (value === 'categories/child-category') {
-      this.router.navigate(['categories/child-category'] );
-    } else if (value === 'brands') {
-      this.router.navigate(['categories/brands'] );
-    } else if (value === 'orders') {
-      this.router.navigate(['orders'] );
-    } else if (value === 'vendors') {
-      this.router.navigate(['vendors'] );
+  route(value: string, apiToken?: any) {
+    console.log('route to: ', value);
+    if (apiToken.user_permission === AppConstants.userType.admin) {
+      if (value === 'dashboard') {
+        this.router.navigate(['dashboard'] );
+      } else if (value === 'profile') {
+        this.router.navigate(['profile'] );
+      } else if (value === 'products') {
+        this.router.navigate(['products'] );
+      } else if (value === 'categories') {
+        this.router.navigate(['categories'] );
+      } else if (value === 'categories/sub-category') {
+        this.router.navigate(['categories/sub-category'] );
+      } else if (value === 'categories/child-category') {
+        this.router.navigate(['categories/child-category'] );
+      } else if (value === 'brands') {
+        this.router.navigate(['categories/brands'] );
+      } else if (value === 'orders') {
+        this.router.navigate(['orders'] );
+      } else if (value === 'vendors') {
+        this.router.navigate(['vendors'] );
+      }
+    } else if (apiToken.user_permission === AppConstants.userType.vendor) {
+      if (value === 'dashboard') {
+        this.router.navigate(['dashboard'] );
+      } else if (value === 'profile') {
+        this.router.navigate(['profile'] );
+      } else if (value === 'products') {
+        this.router.navigate(['products'] );
+      } else if (value === 'orders') {
+        this.router.navigate(['orders'] );
+      }
+    } else if(apiToken.user_permission === AppConstants.userType.deliveryBoy) {
+
     }
   }
-
 }

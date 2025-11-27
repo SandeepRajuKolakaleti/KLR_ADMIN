@@ -166,10 +166,10 @@ export class AppConstants {
   public static StorageValues= ['apiToken', 'userInfo', 'loggedIn'];
 
   public static userType = {
-    admin: 'admin',
-    user: 'user',
-    vendor: 'vendor',
-    deliveryBoy: 'deliveryBoy'
+    admin: 'Admin',
+    user: 'User',
+    vendor: 'Vendor',
+    deliveryBoy: 'DeliveryBoy'
   }
 
   public static  image = {

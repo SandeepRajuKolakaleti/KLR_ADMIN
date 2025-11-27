@@ -38,8 +38,8 @@
             <li class="dropdown nav-item">
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar-2.png" alt="User" /></a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                    <a class="dropdown-item" href="javascript:void(0)" (click)="route('profile')"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                    <a class="dropdown-item" href="javascript:void(0)" (click)="route('profile')"><i class="material-icons md-settings"></i>Account Settings</a>
+                    <a class="dropdown-item" href="javascript:void(0)" (click)="route('profile', apiToken)"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                    <a class="dropdown-item" href="javascript:void(0)" (click)="route('profile', apiToken)"><i class="material-icons md-settings"></i>Account Settings</a>
                     <a class="dropdown-item" href="javascript:void(0)"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
                     <a class="dropdown-item" href="javascript:void(0)"><i class="material-icons md-receipt"></i>Billing</a>
                     <a class="dropdown-item" href="javascript:void(0)"><i class="material-icons md-help_outline"></i>Help center</a>
@@ -59,59 +59,129 @@
             <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
         </div>
     </div>
-    <nav>
-        <ul class="menu-aside">
-            <li class="menu-item active">
-                <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard')">
-                    <i class="icon material-icons md-home"></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li class="menu-item has-submenu">
-                <a class="menu-link" href="javascript:void(0)">
-                    <i class="icon material-icons md-shopping_bag"></i>
-                    <span class="text">Products</span>
-                </a>
-                <div class="submenu">
-                    <a href="javascript:void(0)" (click)="route('products')">Product List</a>
-                    <a href="javascript:void(0)" (click)="route('categories')">Categories</a>
-                    <a href="javascript:void(0)" (click)="route('categories/sub-category')">Sub Categories</a>
-                    <a href="javascript:void(0)" (click)="route('categories/child-category')">Child Categories</a>
-                    <a href="javascript:void(0)" (click)="route('brands')">brands</a>
-                </div>
-            </li>
-            <li class="menu-item has-submenu">
-                <a class="menu-link" href="javascript:void(0)">
-                    <i class="icon material-icons md-shopping_bag"></i>
-                    <span class="text">Orders</span>
-                </a>
-                <div class="submenu">
-                    <a href="javascript:void(0)" (click)="route('orders')">orders List</a>
-                </div>
-            </li>
-        </ul>
-        <hr />
-        <ul class="menu-aside">
-            <li class="menu-item has-submenu">
-                <a class="menu-link" href="javascript:void(0)">
-                    <i class="icon material-icons md-settings"></i>
-                    <span class="text">Settings</span>
-                </a>
-                <div class="submenu">
-                    <a (click)="route('profile')" href="javascript:void(0)">profile</a>
-                </div>
-            </li>
-            <li class="menu-item has-submenu">
-                <a class="menu-link" href="javascript:void(0)">
-                    <i class="icon material-icons md-settings"></i>
-                    <span class="text">Vendors</span>
-                </a>
-                <div class="submenu">
-                    <a (click)="route('vendors')" href="javascript:void(0)">Vendors list</a>
-                </div>
-            </li>
-        </ul>
-        <br />
-        <br />
-    </nav>
+    @if (apiToken.user_permission === appConstants.userType.admin) {
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Manage Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="javascript:void(0)" (click)="route('products', apiToken)">Product List</a>
+                        <a href="javascript:void(0)" (click)="route('categories', apiToken)">Categories</a>
+                        <a href="javascript:void(0)" (click)="route('categories/sub-category', apiToken)">Sub Categories</a>
+                        <a href="javascript:void(0)" (click)="route('categories/child-category', apiToken)">Child Categories</a>
+                        <a href="javascript:void(0)" (click)="route('brands', apiToken)">brands</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Manage Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">orders List</a>
+                    </div>
+                </li>
+            </ul>
+            <hr />
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="text">Vendors</span>
+                    </a>
+                    <div class="submenu">
+                        <a (click)="route('vendors', apiToken)" href="javascript:void(0)">Vendors list</a>
+                    </div>
+                </li>
+            </ul>
+            <br />
+            <br />
+        </nav>
+    } @else if(apiToken.user_permission === appConstants.userType.vendor) {
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Manage Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="javascript:void(0)" (click)="route('products', apiToken)">Product List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Manage Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">orders List</a>
+                    </div>
+                </li>
+            </ul>
+            <hr />
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                    </div>
+                </li>
+            </ul>
+            <br />
+            <br />
+        </nav>
+    } @else if(apiToken.user_permission === appConstants.userType.deliveryBoy) {
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+            <hr />
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                    </div>
+                </li>
+            </ul>
+            <br />
+            <br />
+        </nav>
+    }
 </aside>
