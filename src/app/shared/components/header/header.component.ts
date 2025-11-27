@@ -93,6 +93,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       }
     } else if(apiToken.user_permission === AppConstants.userType.deliveryBoy) {
 
+    } else {
+      if (value === 'dashboard') {
+        this.router.navigate(['dashboard'] );
+      } else if (value === 'profile') {
+        this.router.navigate(['profile'] );
+      }
     }
   }
 }

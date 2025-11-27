@@ -183,5 +183,30 @@
             <br />
             <br />
         </nav>
+    } @else {
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+            <hr />
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                    </div>
+                </li>
+            </ul>
+            <br />
+            <br />
+        </nav>
     }
 </aside>
