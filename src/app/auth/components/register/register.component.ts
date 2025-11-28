@@ -128,13 +128,13 @@ export class RegisterComponent extends CommonBaseComponent implements OnInit {
   permission() {
     const userType = this.registerForm.controls['userType'].value;
     if (userType === AppConstants.userType.admin) {
-      return '1';
+      return AppConstants.permissionType.admin;
     } else if (userType === AppConstants.userType.user) {
-      return '2';
+      return AppConstants.permissionType.user;
     } else if (userType === AppConstants.userType.vendor) {
-      return '3';
+      return AppConstants.permissionType.vendor;
     } else {
-      return '4';
+      return AppConstants.permissionType.deliveryBoy;
     }
   } 
 

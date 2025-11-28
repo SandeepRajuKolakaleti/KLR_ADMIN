@@ -224,8 +224,8 @@
                                     <div class="col-lg-12">
                                         <label class="form-label">Vendor</label>
                                         <select formControlName="Vendor" class="form-select" (change)="onVendorSelected($event)">
-                                            <option *ngFor="let vendor of vendors" [value]="vendor.Id">
-                                                {{ vendor.Name }}
+                                            <option *ngFor="let vendor of vendors" [value]="vendor.id">
+                                                {{ vendor.name }}
                                             </option>
                                         </select>
                                     </div>

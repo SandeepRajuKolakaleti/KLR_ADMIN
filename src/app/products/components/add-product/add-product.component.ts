@@ -7,6 +7,7 @@ import { SubCategoryService } from '../../../categories/services/sub-category.se
 import { ChildCategoryService } from '../../../categories/services/child-category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VendorService } from '../../../vendors/services/vendor.service';
+import { AppConstants } from 'src/app/app.constants';
 
 @Component({
     selector: 'app-add-product',
@@ -234,6 +235,10 @@ export class AddProductComponent implements OnDestroy, OnInit {
       Vendor: Number(this.product.Vendor) || '',
       ...this.product,
     });
+    let user = localStorage.getItem('ApiToken');
+    const parsedUser = user ? JSON.parse(user) : null;
+    if(parsedUser.user_permission === AppConstants.userRole.vendor)
+    this.productForm.controls['Vendor'].disable()
     this.productForm.markAsDirty();
     this.productForm.markAsTouched();
   }

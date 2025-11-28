@@ -3,7 +3,7 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Vendors List</h2>
-                <p>total no.of.vendors: 1</p>
+                <p>Total no.of.vendors: {{totalVendors}}</p>
             </div>
             <div class="content-header-btn">
               <a href="javascript:void(0)" (click)="exportVendors()" class="btn btn-light rounded font-md">Export</a>
@@ -48,19 +48,19 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef> Seller </th>
-                  <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                 </ng-container>
               
                 <!-- Price Column -->
                 <ng-container matColumnDef="email">
                   <th mat-header-cell *matHeaderCellDef> Email </th>
-                  <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.email}} </td>
                 </ng-container>
               
                 <!-- Status Column -->
                 <ng-container matColumnDef="address">
                   <th mat-header-cell *matHeaderCellDef> Address </th>
-                  <td mat-cell *matCellDef="let element"> {{element.Address}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.address}} </td>
                 </ng-container>
 
                 <!-- Action Column -->

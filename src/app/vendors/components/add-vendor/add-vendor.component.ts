@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VendorService } from '../../services/vendor.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppConstants } from 'src/app/app.constants';
 
 @Component({
   selector: 'app-add-vendor', 
@@ -42,6 +43,10 @@ export class AddVendorComponent {
       Email: ['', Validators.required],
       PhoneNumber: ['', Validators.required],
       Address: ['', Validators.required],
+			Password: [ '', Validators.required],
+      userRole: [{ value: AppConstants.userType.admin, disabled: true }, Validators.required],
+      permissionId: [{ value:AppConstants.permissionType.vendor, disabled: true}, Validators.required],
+      Birthday: ['', Validators.required],
       TotalSales: ['', Validators.required],
       Revenue: ['', Validators.required],
       Status: ['', Validators.required],
@@ -50,7 +55,7 @@ export class AddVendorComponent {
       if (params && params["data"]) {
         this.vendor = (JSON.parse(params["data"])).vendor || this.vendor;
         console.log('Vendor:', this.vendor);
-        if (this.vendor && this.vendor.Id) {
+        if (this.vendor && this.vendor.id) {
           this.fillForm();
         }
       }
@@ -66,8 +71,17 @@ export class AddVendorComponent {
     this.vendorForm.updateValueAndValidity();
     this.vendorForm.setErrors(null);
     this.vendorForm.patchValue({
-      File: this.vendor.ThumnailImage || '',
-      ...this.vendor,
+      File: this.vendor.image || '',
+      Id: this.vendor.id || '',
+      Name: this.vendor.name || '',
+      Email: this.vendor.email || '',
+      PhoneNumber: this.vendor.phonenumber || '',
+      Password: this.vendor.password || '',
+      Address: this.vendor.address || '',
+      TotalSales: this.vendor.totalSales || '',
+      Revenue: this.vendor.revenue || '',
+      Birthday: this.vendor.birthday || '',
+      Status: this.vendor.status || '',
     });
     this.vendorForm.controls['File'].setValue(this.vendor.ThumnailImage || '');
     this.vendorForm.markAsDirty();
@@ -96,11 +110,18 @@ export class AddVendorComponent {
     if (this.vendorForm.valid) {
       console.log('Vendor saved:', this.vendorForm.value);
       const formData = new FormData();
-      formData.append('ThumnailImage', '');
-      formData.append('Name', this.vendorForm.controls['Name'].value);
-      formData.append('Email', this.vendorForm.controls['Email'].value);
-      formData.append('PhoneNumber', this.vendorForm.controls['PhoneNumber'].value);
-      formData.append('Address', this.vendorForm.controls['Address'].value);
+      formData.append('image', '');
+      formData.append('name', this.vendorForm.controls['Name'].value);
+      formData.append('email', this.vendorForm.controls['Email'].value);
+      formData.append('phonenumber', this.vendorForm.controls['PhoneNumber'].value);
+      formData.append('address', this.vendorForm.controls['Address'].value);
+      //formData.append('status', this.vendorForm.controls['Status'].value);
+      formData.append('password', this.vendorForm.controls['Password'].value);
+      formData.append('birthday', this.vendorForm.controls['Birthday'].value);
+      formData.append('userRole', AppConstants.userType.vendor);
+      formData.append('permissionId', AppConstants.permissionType.vendor);
+      formData.append('revenue', this.vendorForm.controls['Revenue'].value);
+      formData.append('totalSales', this.vendorForm.controls['TotalSales'].value);
       if (this.vendorForm.controls['File'].value) {
         formData.append('file', this.selectedFile as Blob);
       }
@@ -112,6 +133,7 @@ export class AddVendorComponent {
             duration: 3000,
             panelClass: ['snackbar-success']
           });
+          this.vendorForm.reset();
           this.router.navigate(['vendors']);
         },
         (error: any) => {
@@ -120,7 +142,7 @@ export class AddVendorComponent {
         }
       );
       // Reset the form after saving
-      this.vendorForm.reset();
+      // this.vendorForm.reset();
       this.imgSrc = 'assets/imgs/theme/upload.svg'; // Reset image preview
       this.editFlow = false; // Reset edit flow
       this.vendorForm.markAsPristine();
@@ -136,12 +158,19 @@ export class AddVendorComponent {
     console.log('Editing product:', this.vendorForm.value);
     if (this.vendorForm.valid) {
       const formData = new FormData();
-      formData.append('ThumnailImage', '');
-      formData.append('Id', this.vendorForm.controls['Id'].value);
-      formData.append('Name', this.vendorForm.controls['Name'].value);
-      formData.append('Email', this.vendorForm.controls['Email'].value);
-      formData.append('PhoneNumber', this.vendorForm.controls['PhoneNumber'].value);
-      formData.append('Address', this.vendorForm.controls['Address'].value);
+      formData.append('image', '');
+      formData.append('Id', this.vendorForm.controls['Id'].value.toString());
+      formData.append('name', this.vendorForm.controls['Name'].value);
+      formData.append('email', this.vendorForm.controls['Email'].value);
+      formData.append('phonenumber', this.vendorForm.controls['PhoneNumber'].value);
+      formData.append('address', this.vendorForm.controls['Address'].value);
+      // formData.append('status', this.vendorForm.controls['Status'].value);
+      formData.append('password', this.vendorForm.controls['Password'].value);
+      formData.append('birthday', this.vendorForm.controls['Birthday'].value);
+      formData.append('userRole', AppConstants.userType.vendor);
+      formData.append('permissionId', AppConstants.permissionType.vendor);
+      formData.append('revenue', this.vendorForm.controls['Revenue'].value);
+      formData.append('totalSales', this.vendorForm.controls['TotalSales'].value);
       if (this.vendorForm.controls['File'].value) {
         formData.append('file', this.selectedFile as Blob);
       }
@@ -154,6 +183,7 @@ export class AddVendorComponent {
             panelClass: ['snackbar-success']
           });
           this.router.navigate(['vendors']);
+          this.vendorForm.reset();
         },
         (error: any) => {
           console.error('Error updating vendor:', error);

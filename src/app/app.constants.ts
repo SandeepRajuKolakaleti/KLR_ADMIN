@@ -2,8 +2,11 @@ export class AppConstants {
   constructor() {}
 
   public static userRole = {
-    driver: 'Customer',
-    admin: 'Admin'
+    driver: 'Driver',
+    admin: 'Admin',
+    user: 'User',
+    vendor: 'Vendor',
+    deliveryBoy: 'DeliveryBoy'
   };
 
   public static prefferedLanguages = {
@@ -170,6 +173,13 @@ export class AppConstants {
     user: 'User',
     vendor: 'Vendor',
     deliveryBoy: 'DeliveryBoy'
+  }
+
+  public static permissionType = {
+    admin: '1',
+    user: '2',
+    vendor: '3',
+    deliveryBoy: '4'
   }
 
   public static  image = {

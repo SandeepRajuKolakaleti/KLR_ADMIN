@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 export class VendorsComponent implements OnInit, AfterViewInit {
   ELEMENT_DATA: any[] = [];
   vendors: any[] = [];
+  totalVendors: number = 0;
   displayedColumns: string[] = ['select', 'image', 'name', 'email', 'address', 'action'];
   dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
   selection = new SelectionModel<any>(true, []);
@@ -34,12 +35,13 @@ export class VendorsComponent implements OnInit, AfterViewInit {
     this.vendorService.getVendors().subscribe((data: any) => {
       console.log('Vendors fetched successfully:', data);
       this.vendors = data;
+      this.totalVendors = data.length;
       this.ELEMENT_DATA = data.map((item: any, index: number) => ({
         position: index + 1,
-        name: item.Name,
-        image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
-        email: item.Email,
-        address: item.Address,
+        name: item.name,
+        image: item.image || 'assets/images/products/product-1.jpg',
+        email: item.email,
+        address: item.address,
         date: new Date(item.createdAt).toLocaleDateString(),
         ...item
       }));
@@ -82,7 +84,7 @@ export class VendorsComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
     console.log(element);
     //this.router.navigate(['vendors/vendor-detail', { data: JSON.stringify(element)}]);
-    this.router.navigate(['vendors/vendor-detail/'+ element.Id]);
+    this.router.navigate(['vendors/vendor-detail/'+ element.id]);
     // {
     //   data: element.Id,
     //   querParams: JSON.stringify({ id: element.Id })
@@ -107,7 +109,7 @@ export class VendorsComponent implements OnInit, AfterViewInit {
     event.preventDefault();
     event.stopPropagation();
     console.log(element)
-    this.vendorService.delete(element.Id).subscribe((data: any) => {
+    this.vendorService.delete(element.id).subscribe((data: any) => {
       console.log('Vendor deleted successfully:', data);
       this.getVendors();
       this.snackBar.open('Vendor deleted successfully!', 'Close', {
