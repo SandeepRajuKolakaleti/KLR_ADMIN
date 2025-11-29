@@ -5,5 +5,6 @@
     "USERNAMEPASSWORDINVALIDMESSAGE": "username or password can not be empty",
     "INVALIDCREDENTIALS": "In-valid credentials",
     "HELLO": "Hello welcome",
-    "WELCOME": "Welcome to our application 12345"
+    "WELCOME": "Welcome to our application 12345",
+    "OTPVERIFIED": "OTP verified successfully"
 }

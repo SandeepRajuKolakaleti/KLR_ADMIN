@@ -6,5 +6,6 @@
     "HELLO": "Helo",
     "WELCOME": "Welcome to our application common fr json",
     "login": "Login here",
-    "INVALIDDETAILS": "In vald details"
+    "INVALIDDETAILS": "In vald details",
+    "OTPVERIFIED": "OTP verified successfully"
 }
