@@ -44,7 +44,7 @@ export class AddVendorComponent {
       PhoneNumber: ['', Validators.required],
       Address: ['', Validators.required],
 			Password: [ '', Validators.required],
-      userRole: [{ value: AppConstants.userType.admin, disabled: true }, Validators.required],
+      userRole: [{ value: AppConstants.userType.vendor, disabled: true }, Validators.required],
       permissionId: [{ value:AppConstants.permissionType.vendor, disabled: true}, Validators.required],
       Birthday: ['', Validators.required],
       TotalSales: ['', Validators.required],
@@ -106,7 +106,7 @@ export class AddVendorComponent {
     }
   }
 
-  saveProduct() {
+  save() {
     if (this.vendorForm.valid) {
       console.log('Vendor saved:', this.vendorForm.value);
       const formData = new FormData();
@@ -154,8 +154,8 @@ export class AddVendorComponent {
     }
   }
 
-  editProduct() {
-    console.log('Editing product:', this.vendorForm.value);
+  edit() {
+    console.log('Editing user:', this.vendorForm.value);
     if (this.vendorForm.valid) {
       const formData = new FormData();
       formData.append('image', '');

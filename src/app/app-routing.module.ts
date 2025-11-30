@@ -30,6 +30,10 @@ const routes: Routes = [
 		path: 'vendors',
 		loadChildren: () => import('./vendors/vendors.module').then(m => m.VendorsModule),
     canActivate: [AuthGuard]
+	}, {
+		path: 'users',
+		loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+    canActivate: [AuthGuard]
 	},{
 		path: 'profile',
 		loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),

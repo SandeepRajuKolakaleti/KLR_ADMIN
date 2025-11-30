@@ -1,11 +1,11 @@
 <main class="main-wrap">
     <section class="content-main">
-        <form [formGroup]="vendorForm">
+        <form [formGroup]="userForm">
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
-                        <h2 class="content-title" *ngIf="!editFlow">Add New Vendor</h2>
-                        <h2 class="content-title" *ngIf="editFlow">Edit Vendor</h2>
+                        <h2 class="content-title" *ngIf="!editFlow">Add New User</h2>
+                        <h2 class="content-title" *ngIf="editFlow">Edit User</h2>
                         <div>
                             <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
                             @if (!editFlow) {
@@ -25,12 +25,12 @@
                         <div class="card-body">
                             
                             <div class="mb-4">
-                                <label for="product_name" class="form-label">Vendor Name</label>
-                                <input type="text" placeholder="Type here" formControlName="Name" class="form-control" id="vendor_name" />
+                                <label for="product_name" class="form-label">User Name</label>
+                                <input type="text" placeholder="Type here" formControlName="Name" class="form-control" id="user_name" />
                             </div>
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Email</label>
-                                <input type="text" placeholder="Type here" formControlName="Email" class="form-control" id="vendor_email" />
+                                <input type="text" placeholder="Type here" formControlName="Email" class="form-control" id="user_email" />
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">PhoneNumber</label>
@@ -56,6 +56,15 @@
                             <div class="mb-4">
                                 <label class="form-label">Revenue</label>
                                 <input placeholder="Type here" formControlName="Revenue" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">User Role:</label>
+                                <select class="form-select" name="userRole" id="userRole" formControlName="userRole">
+                                    <!-- <option value="{{appConstants.userType.admin}}">Admin</option> -->
+                                    <option value="{{appConstants.userType.user}}">User</option>
+                                    <option value="{{appConstants.userType.vendor}}">Vendor</option>
+                                    <option value="{{appConstants.userType.deliveryBoy}}">Delevery Boy</option>
+                                </select>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Status</label>

@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   signout() {
     console.log('signout');
     this.authService.setAuthenticated(false);
+    localStorage.clear();
     this.router.navigate(['login']);
   }
 
@@ -80,6 +81,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.router.navigate(['orders'] );
       } else if (value === 'vendors') {
         this.router.navigate(['vendors'] );
+      } else if (value === 'users') {
+        this.router.navigate(['users'] );
       }
     } else if (apiToken.user_permission === AppConstants.userType.vendor) {
       if (value === 'dashboard') {
