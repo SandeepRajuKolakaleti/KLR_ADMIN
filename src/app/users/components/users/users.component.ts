@@ -7,6 +7,7 @@ import { UsersService } from '../../services/users.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -36,21 +37,41 @@ export class UsersComponent {
       console.log('users fetched successfully:', data);
       this.users = data;
       this.totalUsers = data.length;
-      this.ELEMENT_DATA = data.map((item: any, index: number) => ({
-        position: index + 1,
-        name: item.name,
-        image: item.image || 'assets/images/products/product-1.jpg',
-        email: item.email,
-        address: item.address,
-        date: new Date(item.createdAt).toLocaleDateString(),
-        ...item
-      }));
-      this.dataSource.data = this.ELEMENT_DATA;
+      this.processImgToBase64(this.users).subscribe((users: any) => {
+        console.log(users);
+        this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+          position: index + 1,
+          name: item.name,
+          image: item.image || 'assets/images/products/product-1.jpg',
+          email: item.email,
+          address: item.address,
+          date: new Date(item.createdAt).toLocaleDateString(),
+          ...item
+        }));
+        this.dataSource.data = this.ELEMENT_DATA;
+        this.dataSource.paginator = this.paginator;
+      });
     }, (error: any) => {
       console.error('Error fetching users:', error);
       // Handle error appropriately, e.g., show a notification or alert
     });
     this.dataSource.paginator = this.paginator;
+  }
+
+  processImgToBase64(data: any) {
+    const imageObservables = data.map((user: {
+      ThumnailImagePath: string; image: string 
+    }) => {
+      return this.userService.getImageBase64({ url: user.image }).pipe(
+        map((response: any) => {
+          user.ThumnailImagePath = user.image;
+          user.image = response? response.img: '';
+
+          return user;
+        })
+      );
+    });
+    return forkJoin(imageObservables); 
   }
 
   ngAfterViewInit() {

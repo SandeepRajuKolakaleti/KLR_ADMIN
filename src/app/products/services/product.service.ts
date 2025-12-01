@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -7,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ProductService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private storageService: StorageService) { }
 
   getHeaders(): any {
     const apiToken = localStorage.getItem('ApiToken');
@@ -68,6 +69,13 @@ export class ProductService {
     return this.http.post(environment.api.URL+'api/products/upload/excel', formData, {
       headers: this.getFormDataHeaders()
     });
+  }
+
+  getImageBase64(payload: any) {
+    const url = environment.api.URL+ 'api/products/uploadImgToBase64';
+    return this.http.post(url, payload, {
+      headers: this.getHeaders(),
+    })
   }
   
 }

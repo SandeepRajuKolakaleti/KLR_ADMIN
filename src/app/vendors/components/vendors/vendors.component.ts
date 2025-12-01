@@ -7,6 +7,7 @@ import { VendorService } from '../../services/vendor.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
     selector: 'app-vendors',
@@ -36,21 +37,41 @@ export class VendorsComponent implements OnInit, AfterViewInit {
       console.log('Vendors fetched successfully:', data);
       this.vendors = data;
       this.totalVendors = data.length;
-      this.ELEMENT_DATA = data.map((item: any, index: number) => ({
-        position: index + 1,
-        name: item.name,
-        image: item.image || 'assets/images/products/product-1.jpg',
-        email: item.email,
-        address: item.address,
-        date: new Date(item.createdAt).toLocaleDateString(),
-        ...item
-      }));
-      this.dataSource.data = this.ELEMENT_DATA;
+      this.processImgToBase64(this.vendors).subscribe((vendors: any) => {
+        console.log(vendors);
+        this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+          position: index + 1,
+          name: item.name,
+          image: item.image || 'assets/images/products/product-1.jpg',
+          email: item.email,
+          address: item.address,
+          date: new Date(item.createdAt).toLocaleDateString(),
+          ...item
+        }));
+        this.dataSource.data = this.ELEMENT_DATA;
+        this.dataSource.paginator = this.paginator;
+      });
     }, (error: any) => {
       console.error('Error fetching users:', error);
       // Handle error appropriately, e.g., show a notification or alert
     });
     this.dataSource.paginator = this.paginator;
+  }
+
+  processImgToBase64(data: any) {
+    const imageObservables = data.map((vendor: {
+      ThumnailImagePath: string; image: string 
+    }) => {
+      return this.vendorService.getImageBase64({ url: vendor.image }).pipe(
+        map((response: any) => {
+          vendor.ThumnailImagePath = vendor.image;
+          vendor.image = response? response.img: '';
+
+          return vendor;
+        })
+      );
+    });
+    return forkJoin(imageObservables); 
   }
 
   ngAfterViewInit() {

@@ -72,4 +72,11 @@ export class VendorService {
       headers: this.getFormDataHeaders()
     });
   }
+
+  getImageBase64(payload: any) {
+    const url = environment.api.URL+ 'api/users/uploadImgToBase64';
+    return this.http.post(url, payload, {
+      headers: this.getHeaders(),
+    })
+  }
 }
