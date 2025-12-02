@@ -24,11 +24,16 @@ export interface SubCategory {
     standalone: false
 })
 export class SubCategoriesComponent {
+  totalSubCategories: number = 0;
   ELEMENT_DATA: SubCategory[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'category', 'slug', 'status', 'action'];
   dataSource = new MatTableDataSource<SubCategory>(this.ELEMENT_DATA);
   selection = new SelectionModel<SubCategory>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
+  offset: number = 0;
+  limit: number = 10;
   imgSrc: string | ArrayBuffer | null = AppConstants.image.uploadDefault;
   isCreateFlow = true;
 
@@ -54,25 +59,34 @@ export class SubCategoriesComponent {
   }
 
   getAllCategories() {
-    this.categoryService.getAll().subscribe((data) => {
-      console.log(data);
+    this.categoryService.getAll().subscribe((response: any) => {
+      console.log(response);
+      let data: any = response.data;
       this.categories = data;
     })
   }
 
   getAll() {
-    this.subCategoryService.getAll().subscribe(async (data: SubCategory[]) => {
+    this.subCategoryService.getAll(this.offset, this.limit).subscribe(async (response: any) => {
+      let data: SubCategory[] = response.data;
+      this.totalSubCategories = response.total;
       if(data && data.length > 0) {
         let brands: SubCategory[] = data;
         this.processImgToBase64(brands).subscribe((categoryes: any) => {
           console.log(categoryes);
           this.dataSource = new MatTableDataSource<SubCategory>(categoryes);
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.paginator = this.matPaginator;
         });
       } else {
         this.dataSource = new MatTableDataSource<SubCategory>([]);
       }
     });
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getAllCategories();
   }
 
   processImgToBase64(data: any) {
@@ -93,7 +107,7 @@ export class SubCategoriesComponent {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -107,7 +121,7 @@ export class SubCategoriesComponent {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */

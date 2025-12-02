@@ -128,7 +128,10 @@
                             </div>
                             <div class="pagination-area mt-30 mb-50">
                                 <mat-paginator #paginator
-                                  [pageSizeOptions]="[10, 20, 50 ,100]" showFirstLastButtons>
+                                    [length]="totalSubCategories"
+                                    [pageSize]="limit"
+                                    [pageSizeOptions]="[10, 20, 50, 100]"
+                                    (page)="pageChanged($event)" showFirstLastButtons>
                                 </mat-paginator>
                             </div>
                         </div>

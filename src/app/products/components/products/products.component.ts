@@ -25,24 +25,34 @@ export interface PeriodicElement {
 })
 export class ProductsComponent implements OnInit, AfterViewInit {
   
-  
+  totalProducts: number = 0;
   ELEMENT_DATA: PeriodicElement[] = [];
   products : any[] = [];
   displayedColumns: string[] = ['select', 'position', 'image', 'name', 'price', 'status', 'date', 'action'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
   @ViewChild('fileInput') fileInput!: ElementRef;
+  offset: number = 0;
+  limit: number = 10;
   constructor(private router: Router, private productService: ProductService) {}
 
   ngOnInit() {
-    this.productService.getProducts().subscribe((data: any) => {
-      console.log('Products fetched successfully:', data);
-      this.products = data;
+    this.getProducts();
+  }
+
+  getProducts() {
+    this.productService.getProducts(this.offset, this.limit).subscribe((response: any) => {
+      console.log('Products fetched successfully:', response.data);
+      this.products = response.data;
+      this.totalProducts = response.total;
       this.processImgToBase64(this.products).subscribe((products: any) => {
         console.log(products);
         this.dataSource = new MatTableDataSource<PeriodicElement>(products);
-        this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+        this.ELEMENT_DATA = this.products.map((item: any, index: number) => ({
           position: index + 1,
           name: item.Name,
           image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
@@ -52,13 +62,19 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           ...item
         }));
         this.dataSource.data = this.ELEMENT_DATA;
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
       });
     }, (error: any) => {
       console.error('Error fetching products:', error);
       // Handle error appropriately, e.g., show a notification or alert
     });
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getProducts();
   }
 
   processImgToBase64(data: any) {
@@ -77,7 +93,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -91,7 +107,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */
@@ -121,9 +137,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.productService.deleteProduct(element.Id).subscribe((response: any) => {
       console.log('Product deleted successfully:', response);
       // Optionally, refresh the product list or remove the deleted product from the UI
-      this.products = this.products.filter(product => product.position !== element.position);
-      this.ELEMENT_DATA = this.ELEMENT_DATA.filter(item => item.position !== element.position);
-      this.dataSource.data = this.ELEMENT_DATA;
+      this.getProducts();
     }, (error: any) => {
       console.error('Error deleting product:', error);
       // Handle error appropriately, e.g., show a notification or alert
@@ -172,23 +186,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       this.productService.uploadXlsFile(target.files[0]).subscribe((response: any) => {
         console.log('File uploaded successfully:', response);
         // Optionally, refresh the product list or update the UI with the new data
-        this.productService.getProducts().subscribe((data: any) => {
-          console.log('Products fetched successfully after import:', data);
-          this.products = data;
-          this.ELEMENT_DATA = data.map((item: any, index: number) => ({
-            position: index + 1,
-            name: item.Name,
-            image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
-            price: item.Price,
-            status: item.Status,
-            date: new Date(item.createdAt).toLocaleDateString(),
-            ...item
-          }));
-          this.dataSource.data = this.ELEMENT_DATA;
-        }, (error: any) => {
-          console.error('Error fetching products after import:', error);
-          // Handle error appropriately, e.g., show a notification or alert
-        });
+        this.getProducts();
       }, (error: any) => {
         console.error('Error uploading file:', error);
         // Handle error appropriately, e.g., show a notification or alert

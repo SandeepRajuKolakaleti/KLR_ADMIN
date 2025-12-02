@@ -22,11 +22,16 @@ export interface Category {
     standalone: false
 })
 export class CategoriesComponent implements OnInit, AfterViewInit {
+  totalCategories: number = 0;
   ELEMENT_DATA: Category[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'slug', 'status', 'action'];
   dataSource = new MatTableDataSource<Category>(this.ELEMENT_DATA);
   selection = new SelectionModel<Category>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
+  offset: number = 0;
+  limit: number = 10;
   imgSrc: string | ArrayBuffer | null = AppConstants.image.uploadDefault;
   isCreateFlow = true;
 
@@ -46,14 +51,21 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
   }
 
   getAllCategories() {
-    this.categoryService.getAll().subscribe(async (data: Category[]) => {
-      let categories: Category[] = data;
+    this.categoryService.getAll(this.offset, this.limit).subscribe(async (response: any) => {
+      let categories: Category[] = response.data;
+      this.totalCategories = response.total;
       this.processImgToBase64(categories).subscribe((categoryes: any) => {
         console.log(categoryes);
         this.dataSource = new MatTableDataSource<Category>(categoryes);
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
       });
     });
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getAllCategories();
   }
 
   processImgToBase64(data: any) {
@@ -74,7 +86,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -88,7 +100,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */

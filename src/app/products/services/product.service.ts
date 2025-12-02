@@ -32,9 +32,13 @@ export class ProductService {
       return headersRequest;
     }
   }
-  getProducts() {
+  getProducts(offset: number = 0, limit: number = 10) {
     return this.http.get(environment.api.URL+'api/products/getAll', {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
+      params: {
+        offset: offset,
+        limit: limit
+      }
     });
   }
   getProductById(id: string) {

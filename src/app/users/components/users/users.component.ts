@@ -22,24 +22,29 @@ export class UsersComponent {
   displayedColumns: string[] = ['select', 'image', 'name', 'email', 'address', 'action'];
   dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
   selection = new SelectionModel<any>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
   @ViewChild('fileInput') fileInput!: ElementRef;
+
+  offset: number = 0;
+  limit: number = 10;
 
   constructor(private router: Router, private userService: UsersService, 
     private snackBar: MatSnackBar) {}
 
   ngOnInit() {
-    this.getVendors();
+    this.getUsers();
   }
 
-  getVendors() {
-    this.userService.getUsers().subscribe((data: any) => {
-      console.log('users fetched successfully:', data);
-      this.users = data;
-      this.totalUsers = data.length;
+  getUsers() {
+    this.userService.getUsers(this.offset, this.limit).subscribe((response: any) => {
+      console.log('users fetched successfully:', response.data);
+      this.users = response?.data;
+      this.totalUsers = response?.total;
       this.processImgToBase64(this.users).subscribe((users: any) => {
         console.log(users);
-        this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+        this.ELEMENT_DATA = this.users.map((item: any, index: number) => ({
           position: index + 1,
           name: item.name,
           image: item.image || 'assets/images/products/product-1.jpg',
@@ -49,13 +54,19 @@ export class UsersComponent {
           ...item
         }));
         this.dataSource.data = this.ELEMENT_DATA;
-        this.dataSource.paginator = this.paginator;
+        this.matPaginator.length = this.totalUsers;
+        this.dataSource.paginator = this.matPaginator;
       });
     }, (error: any) => {
       console.error('Error fetching users:', error);
       // Handle error appropriately, e.g., show a notification or alert
     });
-    this.dataSource.paginator = this.paginator;
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getUsers();
   }
 
   processImgToBase64(data: any) {
@@ -75,7 +86,7 @@ export class UsersComponent {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -89,7 +100,7 @@ export class UsersComponent {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach((row: any) => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */
@@ -120,7 +131,7 @@ export class UsersComponent {
     console.log(element)
     this.userService.delete(element.id).subscribe((data: any) => {
       console.log('User deleted successfully:', data);
-      this.getVendors();
+      this.getUsers();
       this.snackBar.open('User deleted successfully!', 'Close', {
         duration: 3000,
         panelClass: ['snackbar-success']
@@ -165,23 +176,7 @@ export class UsersComponent {
       this.userService.uploadXlsFile(target.files[0]).subscribe((response: any) => {
         console.log('File uploaded successfully:', response);
         // Optionally, refresh the product list or update the UI with the new data
-        this.userService.getUsers().subscribe((data: any) => {
-          console.log('Vendors fetched successfully after import:', data);
-          this.users = data;
-          this.ELEMENT_DATA = data.map((item: any, index: number) => ({
-            position: index + 1,
-            name: item.Name,
-            image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
-            price: item.Price,
-            status: item.Status,
-            date: new Date(item.createdAt).toLocaleDateString(),
-            ...item
-          }));
-          this.dataSource.data = this.ELEMENT_DATA;
-        }, (error: any) => {
-          console.error('Error fetching products after import:', error);
-          // Handle error appropriately, e.g., show a notification or alert
-        });
+        this.getUsers();
       }, (error: any) => {
         console.error('Error uploading file:', error);
         // Handle error appropriately, e.g., show a notification or alert

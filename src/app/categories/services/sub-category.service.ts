@@ -11,11 +11,15 @@ import { SubCategory } from '../components/sub-categories/sub-categories.compone
 export class SubCategoryService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
-  getAll(): Observable<SubCategory[]> {
+  getAll(offset: number = 0, limit: number = 10): Observable<SubCategory[]> {
     const url = environment.api.URL+ 'api/sub-categories/getAll';
     const CrApiSessionStorage = this.storageService.get('ApiToken');
     return this.http.get<SubCategory[]>(url, {
       headers: this.getAuthorizationHeaders(CrApiSessionStorage),
+      params: {
+        offset: offset,
+        limit: limit
+      }
     });
   }
 

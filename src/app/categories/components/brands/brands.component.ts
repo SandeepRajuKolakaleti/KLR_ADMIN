@@ -22,11 +22,16 @@ export interface Brand {
     standalone: false
 })
 export class BrandsComponent {
+  totalBrands: number = 0;
   ELEMENT_DATA: Brand[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'slug', 'status', 'action'];
   dataSource = new MatTableDataSource<Brand>(this.ELEMENT_DATA);
   selection = new SelectionModel<Brand>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
+  offset: number = 0;
+  limit: number = 10;
   imgSrc: string | ArrayBuffer | null = AppConstants.image.uploadDefault;
   isCreateFlow = true;
 
@@ -47,18 +52,26 @@ export class BrandsComponent {
   }
 
   getAll() {
-    this.brandService.getAll().subscribe(async (data: Brand[]) => {
+    this.brandService.getAll(this.offset, this.limit).subscribe(async (response: any) => {
+      this.totalBrands = response.total;
+      let data: Brand[] = response.data;
       if(data && data.length > 0) {
         let brands: Brand[] = data;
         this.processImgToBase64(brands).subscribe((categoryes: any) => {
           console.log(categoryes);
           this.dataSource = new MatTableDataSource<Brand>(categoryes);
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.paginator = this.matPaginator;
         });
       } else {
         this.dataSource = new MatTableDataSource<Brand>([]);
       }
     });
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getAll();
   }
 
   processImgToBase64(data: any) {
@@ -79,7 +92,7 @@ export class BrandsComponent {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -93,7 +106,7 @@ export class BrandsComponent {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */

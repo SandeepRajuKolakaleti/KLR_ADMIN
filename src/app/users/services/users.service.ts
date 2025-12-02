@@ -29,9 +29,13 @@ export class UsersService {
       return headersRequest;
     }
   }
-  getUsers() {
+  getUsers(offset: number = 0, limit: number = 10) {
     return this.http.get(environment.api.URL+'api/users/getAll', {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
+      params: {
+        offset: offset,
+        limit: limit
+      }
     });
   }
   getProductsById(id: string) {

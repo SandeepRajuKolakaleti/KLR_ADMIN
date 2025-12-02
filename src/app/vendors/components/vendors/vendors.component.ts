@@ -22,8 +22,13 @@ export class VendorsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['select', 'image', 'name', 'email', 'address', 'action'];
   dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
   selection = new SelectionModel<any>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
   @ViewChild('fileInput') fileInput!: ElementRef;
+
+  offset: number = 0;
+  limit: number = 10;
 
   constructor(private router: Router, private vendorService: VendorService, 
     private snackBar: MatSnackBar) {}
@@ -33,13 +38,13 @@ export class VendorsComponent implements OnInit, AfterViewInit {
   }
 
   getVendors() {
-    this.vendorService.getVendors().subscribe((data: any) => {
-      console.log('Vendors fetched successfully:', data);
-      this.vendors = data;
-      this.totalVendors = data.length;
+    this.vendorService.getVendors(this.offset, this.limit).subscribe((response: any) => {
+      console.log('Vendors fetched successfully:', response.data);
+      this.vendors = response?.data;
+      this.totalVendors = response.total;
       this.processImgToBase64(this.vendors).subscribe((vendors: any) => {
         console.log(vendors);
-        this.ELEMENT_DATA = data.map((item: any, index: number) => ({
+        this.ELEMENT_DATA = this.vendors.map((item: any, index: number) => ({
           position: index + 1,
           name: item.name,
           image: item.image || 'assets/images/products/product-1.jpg',
@@ -49,13 +54,19 @@ export class VendorsComponent implements OnInit, AfterViewInit {
           ...item
         }));
         this.dataSource.data = this.ELEMENT_DATA;
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
       });
     }, (error: any) => {
       console.error('Error fetching users:', error);
       // Handle error appropriately, e.g., show a notification or alert
     });
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getVendors();
   }
 
   processImgToBase64(data: any) {
@@ -75,7 +86,7 @@ export class VendorsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -89,7 +100,7 @@ export class VendorsComponent implements OnInit, AfterViewInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach((row: any) => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */

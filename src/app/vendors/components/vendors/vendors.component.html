@@ -82,7 +82,10 @@
         <!-- card end// -->
         <div class="pagination-area mt-30 mb-50">
             <mat-paginator #paginator
-              [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons>
+              [length]="totalVendors"
+              [pageSize]="limit"
+              [pageSizeOptions]="[10, 20, 50, 100]"
+              (page)="pageChanged($event)" >
             </mat-paginator>
         </div>
     </section>

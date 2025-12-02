@@ -27,11 +27,16 @@ export interface ChildCategory {
     standalone: false
 })
 export class ChildCategoriesComponent {
+  totalChildCategories: number = 0;
   ELEMENT_DATA: ChildCategory[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'category', 'subCategory', 'slug', 'status', 'action'];
   dataSource = new MatTableDataSource<ChildCategory>(this.ELEMENT_DATA);
   selection = new SelectionModel<ChildCategory>(true, []);
-  @ViewChild(MatPaginator) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  };
+  offset: number = 0;
+  limit: number = 10;
   imgSrc: string | ArrayBuffer | null = AppConstants.image.uploadDefault;
   isCreateFlow = true;
 
@@ -83,18 +88,26 @@ export class ChildCategoriesComponent {
 
   getAll() {
     this.childCategoryFrom.reset();
-    this.childCategoryService.getAll().subscribe(async (data: ChildCategory[]) => {
+    this.childCategoryService.getAll().subscribe(async (response: any) => {
+      this.totalChildCategories = response.total;
+      let data: ChildCategory[] = response.data;
       if(data && data.length > 0) {
         let brands: ChildCategory[] = data;
         this.processImgToBase64(brands).subscribe((categoryes: any) => {
           console.log(categoryes);
           this.dataSource = new MatTableDataSource<ChildCategory>(categoryes);
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.paginator = this.matPaginator;
         });
       } else {
         this.dataSource = new MatTableDataSource<ChildCategory>([]);
       }
     });
+  }
+
+  pageChanged(event: any) {
+    this.limit = event.pageSize;
+    this.offset = event.pageIndex * event.pageSize;
+    this.getAllCategories();
   }
 
   processImgToBase64(data: any) {
@@ -115,7 +128,7 @@ export class ChildCategoriesComponent {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -129,7 +142,7 @@ export class ChildCategoriesComponent {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.matPaginator;
   }
 
   /** The label for the checkbox on the passed row */

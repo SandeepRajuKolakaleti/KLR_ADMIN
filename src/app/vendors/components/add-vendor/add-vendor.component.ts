@@ -64,7 +64,7 @@ export class AddVendorComponent {
 
   fillForm() {
     this.editFlow = true;
-    this.imgSrc = this.vendor.ThumnailImage || 'assets/imgs/theme/upload.svg';
+    this.imgSrc = this.vendor.image || 'assets/imgs/theme/upload.svg';
     this.vendorForm.reset();
     this.vendorForm.markAsPristine();
     this.vendorForm.markAsUntouched();

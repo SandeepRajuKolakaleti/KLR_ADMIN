@@ -12,11 +12,15 @@ export class BrandsService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
   
-    getAll(): Observable<Brand[]> {
+    getAll(offset: number = 0, limit: number = 10): Observable<Brand[]> {
       const url = environment.api.URL+ 'api/brands/getAll';
       const CrApiSessionStorage = this.storageService.get('ApiToken');
       return this.http.get<Brand[]>(url, {
         headers: this.getAuthorizationHeaders(CrApiSessionStorage),
+        params: {
+          offset: offset,
+          limit: limit
+        }
       });
     }
   

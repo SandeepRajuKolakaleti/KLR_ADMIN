@@ -12,11 +12,15 @@ export class CategoryService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
 
-  getAll(): Observable<Category[]> {
+  getAll(offset: number = 0, limit: number = 10): Observable<Category[]> {
     const url = environment.api.URL+ 'api/categories/getAll';
     const CrApiSessionStorage = this.storageService.get('ApiToken');
     return this.http.get<Category[]>(url, {
 			headers: this.getAuthorizationHeaders(CrApiSessionStorage),
+      params: {
+        offset: offset,
+        limit: limit
+      }
 		});
   }
 
