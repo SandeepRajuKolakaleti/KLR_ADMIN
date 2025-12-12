@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="card mb-4">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <table mat-table matTableResponsive [dataSource]="dataSource" class="mat-elevation-z8">
 
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
@@ -79,7 +79,7 @@
             </table>
         </div>
         <!-- card end// -->
-        <div class="pagination-area mt-30 mb-50">
+        <div class="pagination-area mt-30 mb-200">
             <mat-paginator #paginator
                 [length]="totalUsers"
                 [pageSize]="limit"

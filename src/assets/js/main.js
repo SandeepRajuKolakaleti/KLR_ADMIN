@@ -18,12 +18,12 @@
             e("body").removeClass("offcanvas-active")
         }),
         e(".btn-aside-minimize").on("click",function(){
-            window.innerWidth< 768? 
-                (e("body").removeClass("aside-mini"),
-                e(".screen-overlay").removeClass("show"),
-                e(".navbar-aside").removeClass("show"),
-                e("body").removeClass("offcanvas-active"))
-                :e("body").toggleClass("aside-mini")
+            // window.innerWidth< 768? 
+            //     (e("body").removeClass("aside-mini"),
+            //     e(".screen-overlay").removeClass("show"),
+            //     e(".navbar-aside").removeClass("show"),
+            //     e("body").removeClass("offcanvas-active"))
+                e("body").toggleClass("aside-mini")
         }),
         e(".select-nice").length&&e(".select-nice").select2(),
         e("#offcanvas_aside").length){

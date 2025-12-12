@@ -3,6 +3,9 @@
         <a href="javascript:void(0)" class="brand-wrap">
             <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
         </a>
+        @if(isMobile) {
+            <button class="btn btn-icon btn-aside-minimize" (click)="openAside()"><i class="text-muted material-icons md-menu_open"></i></button>
+        }
     </div>
     <div class="col-nav">
         <div *ngIf = "!(isLoggedIn | async)">
@@ -70,7 +73,7 @@
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
-                        <i class="icon material-icons md-shopping_bag"></i>
+                        <i class="icon material-icons md-add_shopping_cart"></i>
                         <span class="text">Manage Products</span>
                     </a>
                     <div class="submenu">
@@ -104,7 +107,7 @@
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
-                        <i class="icon material-icons md-settings"></i>
+                        <i class="icon material-icons md-face"></i>
                         <span class="text">Users</span>
                     </a>
                     <div class="submenu">
@@ -113,7 +116,7 @@
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
-                        <i class="icon material-icons md-settings"></i>
+                        <i class="icon material-icons md-store_mall_directory"></i>
                         <span class="text">Vendors</span>
                     </a>
                     <div class="submenu">
@@ -135,7 +138,7 @@
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
-                        <i class="icon material-icons md-shopping_bag"></i>
+                        <i class="icon material-icons md-add_shopping_cart"></i>
                         <span class="text">Manage Products</span>
                     </a>
                     <div class="submenu">

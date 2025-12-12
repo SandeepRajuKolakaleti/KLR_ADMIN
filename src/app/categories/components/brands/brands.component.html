@@ -47,7 +47,7 @@
                     <div class="col-md-9">
                         <div class="table-responsive">
                             <div class="card mb-4">
-                                <table mat-table [dataSource]="dataSource" class="category-table mat-elevation-z8">
+                                <table mat-table matTableResponsive [dataSource]="dataSource" class="category-table mat-elevation-z8">
                                     <!-- Checkbox Column -->
                                     <ng-container matColumnDef="select">
                                     <th mat-header-cell *matHeaderCellDef>
@@ -111,7 +111,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="pagination-area mt-30 mb-50">
+                            <div class="pagination-area mt-30 mb-200">
                                 <mat-paginator #paginator
                                     [length]="totalBrands"
                                     [pageSize]="limit"

@@ -15,7 +15,8 @@ declare let $: any;
     standalone: false
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
-
+  isMobile =  window.innerWidth< 768;
+  booelanToggleMenu = false;
   isLoggedIn!: Observable<boolean>;
   apiToken: any;
   appConstants = AppConstants;
@@ -42,6 +43,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  openAside() {
+    this.booelanToggleMenu = !this.booelanToggleMenu;
+    $("body").toggleClass("aside-mini")
+    if(this.booelanToggleMenu){
+      $('#offcanvas_aside').css('transform', 'translateX(0%)');
+    } else {
+      $('#offcanvas_aside').css('transform', 'translateX(-100%)');
+    }
   }
 
   signIn() {
