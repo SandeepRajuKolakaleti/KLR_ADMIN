@@ -27,18 +27,23 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.isLoggedIn = this.authService.isUserLoggedIn;
     this.authService.isUserLoggedIn.subscribe((data) => {
       console.log('user LoggedIn:', data);
-      this.apiToken = this.storageService.get('ApiToken');
-      console.log('User', this.apiToken);
-      this.commonService.loadScriptsInOrder([
-        '/assets/js/vendors/jquery-3.6.0.min.js',
-        '/assets/js/vendors/bootstrap.bundle.min.js',
-        '/assets/js/vendors/select2.min.js',
-        '/assets/js/vendors/perfect-scrollbar.js',
-        '/assets/js/vendors/jquery.fullscreen.min.js',
-        '/assets/js/vendors/chart.js',
-        '/assets/js/main.js?v=1.1',
-        'assets/js/custom-chart.js'
-      ]);
+      if (data) {
+        this.apiToken = this.storageService.get('ApiToken');
+        console.log('User', this.apiToken);
+        this.commonService.loadScriptsInOrder([
+          '/assets/js/vendors/jquery-3.6.0.min.js',
+          '/assets/js/vendors/bootstrap.bundle.min.js',
+          '/assets/js/vendors/select2.min.js',
+          '/assets/js/vendors/perfect-scrollbar.js',
+          '/assets/js/vendors/jquery.fullscreen.min.js',
+          '/assets/js/vendors/chart.js',
+          '/assets/js/main.js?v=1.1',
+          'assets/js/custom-chart.js'
+        ]);
+      } else {
+        this.storageService.remove('loggedIn');
+        this.storageService.remove('ApiToken')
+      }
     });
   }
 
