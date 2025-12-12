@@ -30,7 +30,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       if (data) {
         this.apiToken = this.storageService.get('ApiToken');
         console.log('User', this.apiToken);
-        this.commonService.loadScriptsInOrder([
+      } else {
+        this.storageService.remove('loggedIn');
+        this.storageService.remove('ApiToken')
+      }
+      this.commonService.loadScriptsInOrder([
           '/assets/js/vendors/jquery-3.6.0.min.js',
           '/assets/js/vendors/bootstrap.bundle.min.js',
           '/assets/js/vendors/select2.min.js',
@@ -40,10 +44,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
           '/assets/js/main.js?v=1.1',
           'assets/js/custom-chart.js'
         ]);
-      } else {
-        this.storageService.remove('loggedIn');
-        this.storageService.remove('ApiToken')
-      }
     });
   }
 
