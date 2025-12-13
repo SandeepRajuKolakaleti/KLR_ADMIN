@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { PeriodicElement } from '../../../products/components/products/products.component';
 import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
 import { TranslateService } from '@ngx-translate/core';
-import { StorageService } from 'src/app/shared/services/storage/storage.service';
-import { TranslateConfigService } from 'src/app/shared/services/translate/translate-config.service';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 
 @Component({
     selector: 'app-orders',

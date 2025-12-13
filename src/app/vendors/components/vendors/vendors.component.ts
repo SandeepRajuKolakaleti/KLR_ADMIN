@@ -8,10 +8,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { forkJoin, map } from 'rxjs';
-import { CommonBaseComponent } from 'src/app/shared/components/common-base/common-base.component';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
 import { TranslateService } from '@ngx-translate/core';
-import { StorageService } from 'src/app/shared/services/storage/storage.service';
-import { TranslateConfigService } from 'src/app/shared/services/translate/translate-config.service';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 
 @Component({
     selector: 'app-vendors',
