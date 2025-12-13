@@ -7,6 +7,7 @@ import { CommonService } from '../../services/common/common.service';
 import { StorageService } from '../../services/storage/storage.service';
 import { AppConstants } from '../../../app.constants';
 import { TranslateService } from '@ngx-translate/core';
+import { CommonBaseComponent } from '../common-base/common-base.component';
 declare let $: any;
 
 @Component({
@@ -15,19 +16,22 @@ declare let $: any;
     styleUrls: ['./header.component.scss'],
     standalone: false
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent extends CommonBaseComponent implements OnInit, AfterViewInit {
   isMobile =  window.innerWidth< 768;
   booelanToggleMenu = false;
   isLoggedIn!: Observable<boolean>;
   apiToken: any;
   appConstants = AppConstants;
-  constructor(public router: Router, private authService: AuthService, 
-    private translateConfigService: TranslateConfigService,
-    private commonService: CommonService,
-    private storageService: StorageService,
-    protected translateService: TranslateService) { }
+  constructor(public router: Router, private authService: AuthService,
+  private commonService: CommonService,
+  private  translate: TranslateService,
+  protected override storageService: StorageService, 
+  protected override translateConfigService: TranslateConfigService,) {
+    super(translateConfigService, translate, storageService);
+    super.ngOnInit();
+  }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     // console.log('deviceInfo', this.deviceInfo);
     this.isLoggedIn = this.authService.isUserLoggedIn;
     this.authService.isUserLoggedIn.subscribe((data) => {

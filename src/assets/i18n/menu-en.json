@@ -1,6 +1,32 @@
 {
-    "HOME": "Hme",
-    "SETTINGS": "Sttings goes here",
-    "DontHaveAccount": "Don't have an account?"
-  }
-  
+  "HOME": "Home",
+  "SIGNIN":"sign-in",
+  "DontHaveAccount": "Don't have an account?",
+  "DASHBOARD": {
+    "NAME": "Dashboard"
+  },
+  "PRODUCTS": {
+    "MANAGEPRODUCTS": "Manage Products",
+    "PRODUCTLIST": "Product list",
+    "BRANDS": "Brands",
+    "CATEGORIES": "Categories",
+    "SUBCATEGORY": "Sub Category",
+    "CHILDCATGEORY": "Child Category"
+  },
+	"ORDERS": {
+	  "MANAGEORDERS": "Manage Orders",
+	  "ORDERSLIST": "Orders list"
+	},
+	"SETTINGS": {
+		"NAME": "Settings",
+		"PROFILE": "Profile"
+	},
+	"USERS": {
+	  "NAME": "Users",
+	  "USERSLIST": "Users list"
+	},
+	"VENDORS": {
+	  "NAME": "Vendors",
+	  "VENDORSLIST": "Vendors list"
+	}
+}

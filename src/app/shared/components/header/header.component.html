@@ -13,14 +13,14 @@
                 <li class="nav-item">
                     <a class="nav-link btn-icon" href="/login">
                         <i class="material-icons md-login"></i>
-                        <span style="margin-top: 0px;width: 46px;position: absolute;">sign-in</span>
+                        <span style="margin-top: 0px;width: 46px;position: absolute;">{{'SIGNIN'| translate}}</span>
                     </a>
                 </li>
             </ul>
         </div>
         <ul class="nav" *ngIf = "(isLoggedIn | async)">
             <li class="nav-item">
-                <a class="nav-link btn-icon" href="#">
+                <a class="nav-link btn-icon" href="javascript:void(0)">
                     <i class="material-icons md-notifications animation-shake"></i>
                     <span class="badge rounded-pill">3</span>
                 </a>
@@ -29,7 +29,7 @@
                 <a class="nav-link btn-icon darkmode" href="javascript:void(0)"> <i class="material-icons md-nights_stay"></i> </a>
             </li>
             <li class="nav-item">
-                <a href="javascript:void(0)" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
             </li>
             <li class="dropdown nav-item">
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
@@ -68,29 +68,29 @@
                 <li class="menu-item active">
                     <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
                         <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text">{{"DASHBOARD.NAME"|translate}}</span>
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-add_shopping_cart"></i>
-                        <span class="text">Manage Products</span>
+                        <span class="text">{{"PRODUCTS.MANAGEPRODUCTS"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a href="javascript:void(0)" (click)="route('products', apiToken)">Product List</a>
-                        <a href="javascript:void(0)" (click)="route('categories', apiToken)">Categories</a>
-                        <a href="javascript:void(0)" (click)="route('categories/sub-category', apiToken)">Sub Categories</a>
-                        <a href="javascript:void(0)" (click)="route('categories/child-category', apiToken)">Child Categories</a>
-                        <a href="javascript:void(0)" (click)="route('brands', apiToken)">brands</a>
+                        <a href="javascript:void(0)" (click)="route('products', apiToken)">{{"PRODUCTS.PRODUCTLIST"|translate}}</a>
+                        <a href="javascript:void(0)" (click)="route('categories', apiToken)">{{"PRODUCTS.CATEGORIES"|translate}}</a>
+                        <a href="javascript:void(0)" (click)="route('categories/sub-category', apiToken)">{{"PRODUCTS.SUBCATEGORY"|translate}}</a>
+                        <a href="javascript:void(0)" (click)="route('categories/child-category', apiToken)">{{"PRODUCTS.CHILDCATGEORY"|translate}}</a>
+                        <a href="javascript:void(0)" (click)="route('brands', apiToken)">{{"PRODUCTS.BRANDS"|translate}}</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Manage Orders</span>
+                        <span class="text">{{"ORDERS.MANAGEORDERS"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">orders List</a>
+                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">{{"ORDERS.ORDERSLIST"|translate}}</a>
                     </div>
                 </li>
             </ul>
@@ -99,28 +99,28 @@
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
+                        <span class="text">{{"SETTINGS.NAME"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">{{"SETTINGS.PROFILE"|translate}}</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-face"></i>
-                        <span class="text">Users</span>
+                        <span class="text">{{"USERS.NAME"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a (click)="route('users', apiToken)" href="javascript:void(0)">Users list</a>
+                        <a (click)="route('users', apiToken)" href="javascript:void(0)">{{"USERS.USERSLIST"|translate}}</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-store_mall_directory"></i>
-                        <span class="text">Vendors</span>
+                        <span class="text">{{"VENDORS.NAME"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a (click)="route('vendors', apiToken)" href="javascript:void(0)">Vendors list</a>
+                        <a (click)="route('vendors', apiToken)" href="javascript:void(0)">{{"VENDORS.VENDORSLIST"|translate}}</a>
                     </div>
                 </li>
             </ul>
@@ -133,37 +133,37 @@
                 <li class="menu-item active">
                     <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
                         <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text">{{"DASHBOARD.NAME"|translate}}</span>
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-add_shopping_cart"></i>
-                        <span class="text">Manage Products</span>
+                        <span class="text">{{"PRODUCTS.MANAGEPRODUCTS"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a href="javascript:void(0)" (click)="route('products', apiToken)">Product List</a>
+                        <a href="javascript:void(0)" (click)="route('products', apiToken)">{{"PRODUCTS.PRODUCTLIST"|translate}}</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Manage Orders</span>
+                        <span class="text">{{"ORDERS.MANAGEORDERS"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">orders List</a>
+                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">{{"ORDERS.ORDERSLIST"|translate}}</a>
                     </div>
                 </li>
             </ul>
             <hr />
             <ul class="menu-aside">
-                <li class="menu-item has-submenu">
+                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
+                        <span class="text">{{"SETTINGS.NAME"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">{{"SETTINGS.PROFILE"|translate}}</a>
                     </div>
                 </li>
             </ul>
@@ -176,7 +176,7 @@
                 <li class="menu-item active">
                     <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
                         <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text">{{"DASHBOARD.NAME"|translate}}</span>
                     </a>
                 </li>
             </ul>
@@ -185,10 +185,10 @@
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
+                        <span class="text">{{"SETTINGS.NAME"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">{{"SETTINGS.PROFILE"|translate}}</a>
                     </div>
                 </li>
             </ul>
@@ -201,7 +201,7 @@
                 <li class="menu-item active">
                     <a class="menu-link" href="javascript:void(0)" (click)="route('dashboard', apiToken)">
                         <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text">{{"DASHBOARD.NAME"|translate}}</span>
                     </a>
                 </li>
             </ul>
@@ -210,10 +210,10 @@
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
+                        <span class="text">{{"SETTINGS.NAME"|translate}}</span>
                     </a>
                     <div class="submenu">
-                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">profile</a>
+                        <a (click)="route('profile', apiToken)" href="javascript:void(0)">{{"SETTINGS.PROFILE"|translate}}</a>
                     </div>
                 </li>
             </ul>

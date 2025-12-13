@@ -4,6 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PeriodicElement } from '../../../products/components/products/products.component';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
+import { TranslateConfigService } from 'src/app/shared/services/translate/translate-config.service';
 
 @Component({
     selector: 'app-orders',
@@ -11,7 +15,7 @@ import { PeriodicElement } from '../../../products/components/products/products.
     styleUrls: ['./orders.component.scss'],
     standalone: false
 })
-export class OrdersComponent implements OnInit, AfterViewInit {
+export class OrdersComponent extends CommonBaseComponent implements OnInit, AfterViewInit {
 ELEMENT_DATA = [
     {position: 1,  name: 'Hydrogen', email: 'sandeep@test.com', total: 1.0079, status: 'H', date: '2-2-2020'},
     {position: 2,  name: 'Helium', email: 'sandeep@test.com', total: 4.0026, status: 'He', date: '2-2-2020'},
@@ -32,9 +36,14 @@ ELEMENT_DATA = [
   selection = new SelectionModel<any>(true, []);
   @ViewChild(MatPaginator) private paginator!: MatPaginator;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService,) {
+      super(translateConfigService, translate, storageService);
+      super.ngOnInit();
+  }
 
-  ngOnInit() {
+  override ngOnInit() {
 
   }
 
