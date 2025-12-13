@@ -5,7 +5,8 @@ import { AuthService } from '../../../../app/auth/services/auth/auth.service';
 import { TranslateConfigService } from '../../services/translate/translate-config.service';
 import { CommonService } from '../../services/common/common.service';
 import { StorageService } from '../../services/storage/storage.service';
-import { AppConstants } from 'src/app/app.constants';
+import { AppConstants } from '../../../app.constants';
+import { TranslateService } from '@ngx-translate/core';
 declare let $: any;
 
 @Component({
@@ -20,7 +21,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   isLoggedIn!: Observable<boolean>;
   apiToken: any;
   appConstants = AppConstants;
-  constructor(public router: Router, private authService: AuthService, private translateConfigService: TranslateConfigService,private commonService: CommonService, private storageService: StorageService) { }
+  constructor(public router: Router, private authService: AuthService, 
+    private translateConfigService: TranslateConfigService,
+    private commonService: CommonService,
+    private storageService: StorageService,
+    protected translateService: TranslateService) { }
 
   ngOnInit(): void {
     // console.log('deviceInfo', this.deviceInfo);
@@ -35,15 +40,32 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.storageService.remove('ApiToken')
       }
       this.commonService.loadScriptsInOrder([
-          '/assets/js/vendors/jquery-3.6.0.min.js',
-          '/assets/js/vendors/bootstrap.bundle.min.js',
-          '/assets/js/vendors/select2.min.js',
-          '/assets/js/vendors/perfect-scrollbar.js',
-          '/assets/js/vendors/jquery.fullscreen.min.js',
-          '/assets/js/vendors/chart.js',
-          '/assets/js/main.js?v=1.1',
-          'assets/js/custom-chart.js'
-        ]);
+        '/assets/js/vendors/jquery-3.6.0.min.js',
+        '/assets/js/vendors/bootstrap.bundle.min.js',
+        '/assets/js/vendors/select2.min.js',
+        '/assets/js/vendors/perfect-scrollbar.js',
+        '/assets/js/vendors/jquery.fullscreen.min.js',
+        '/assets/js/vendors/chart.js',
+        '/assets/js/main.js?v=1.1',
+        'assets/js/custom-chart.js'
+      ]);
+      let language = this.storageService.get('language');
+      if (language) {
+        this.translateService.use(language);
+        setTimeout(() => {
+          if($) {
+            $('.dropdown-item').removeClass("text-brand");
+            $('#'+language).addClass('text-brand');
+          }
+        }, 1000);
+      }  else {
+        // Set default language
+        this.translateService.setDefaultLang('en');
+        // Get browser language (optional)
+        const browserLang = this.translateService.getBrowserLang();
+        this.translateService.use(browserLang?.match(/en|fr|es/) ? browserLang : 'en');
+        $('#en').addClass('text-brand');
+      }
     });
   }
 
@@ -72,7 +94,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.router.navigate(['login']);
   }
 
-  changeLanguage(lang: string) {
+  changeLanguage(lang: string, event: Event) {
+    $('.dropdown-item').removeClass("text-brand");
+    $(event.target).addClass('text-brand');
     this.translateConfigService.setSelectedLanguage(lang);
   }
 

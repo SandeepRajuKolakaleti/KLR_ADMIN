@@ -34,8 +34,8 @@
             <li class="dropdown nav-item">
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                    <a class="dropdown-item text-brand" (click)="changeLanguage('en')" href="javascript:void(0)"><img src="assets/imgs/theme/flag-us.png" alt="English" />English</a>
-                    <a class="dropdown-item" (click)="changeLanguage('fr')" href="javascript:void(0)"><img src="assets/imgs/theme/flag-fr.png" alt="Français" />Français</a>
+                    <a class="dropdown-item text-brand" id="en" (click)="changeLanguage('en', $event)" href="javascript:void(0)"><img src="assets/imgs/theme/flag-us.png" alt="English" />English</a>
+                    <a class="dropdown-item" id="fr" (click)="changeLanguage('fr', $event)" href="javascript:void(0)"><img src="assets/imgs/theme/flag-fr.png" alt="Français" />Français</a>
                 </div>
             </li>
             <li class="dropdown nav-item">

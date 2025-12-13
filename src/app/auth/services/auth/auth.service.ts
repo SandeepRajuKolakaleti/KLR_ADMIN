@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { StorageService } from '../../../shared/services/storage/storage.service';
-import { CommonService } from 'src/app/shared/services/common/common.service';
+import { CommonService } from '../../../shared/services/common/common.service';
 
 @Injectable({
 	providedIn: 'root'

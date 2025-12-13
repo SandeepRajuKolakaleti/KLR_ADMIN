@@ -6,7 +6,7 @@ import {
   style,
   animate
 } from '@angular/animations';
-import { AuthService } from 'src/app/auth/services/auth/auth.service';
+import { AuthService } from '../../../auth/services/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

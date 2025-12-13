@@ -5,10 +5,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { forkJoin, map } from 'rxjs';
-import { AppConstants } from 'src/app/app.constants';
+import { AppConstants } from '../../../app.constants';
 import { CategoryService } from '../../services/category.service';
 import { SubCategoryService } from '../../services/sub-category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 export interface SubCategory {
   Id: number,
   ThumnailImage: String,
@@ -23,7 +27,7 @@ export interface SubCategory {
     styleUrls: ['./sub-categories.component.scss'],
     standalone: false
 })
-export class SubCategoriesComponent {
+export class SubCategoriesComponent extends CommonBaseComponent {
   totalSubCategories: number = 0;
   ELEMENT_DATA: SubCategory[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'category', 'slug', 'status', 'action'];
@@ -42,10 +46,16 @@ export class SubCategoriesComponent {
   selectedCategory = 0;
 
   constructor(private router: Router, private subCategoryService: SubCategoryService, private fb: FormBuilder,
-    private categoryService: CategoryService, private snackBar: MatSnackBar
-  ) {}
+    private categoryService: CategoryService, private snackBar: MatSnackBar,
+    private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService,
+  ) {
+    super(translateConfigService, translate, storageService);
+    super.ngOnInit();
+  }
 
-  ngOnInit() {
+  override ngOnInit(): void {
     this.subCategoryFrom = this.fb.group({
       Id: [''],
       File: [null, Validators.required],

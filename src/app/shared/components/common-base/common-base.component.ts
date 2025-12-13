@@ -20,6 +20,12 @@ export class CommonBaseComponent implements OnInit {
     let language = this.storageService.get('language');
     if (language) {
       this.translateService.use(language);
+    } else {
+      // Set default language
+      this.translateService.setDefaultLang('en');
+      // Get browser language (optional)
+      const browserLang = this.translateService.getBrowserLang();
+      this.translateService.use(browserLang?.match(/en|fr|es/) ? browserLang : 'en');
     }
     this.translateConfigService.selectedLanguage$.subscribe((value) => {
       console.log('from common base component: selectedLangauage', value);

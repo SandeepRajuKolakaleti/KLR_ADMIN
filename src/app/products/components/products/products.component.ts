@@ -7,6 +7,10 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { ProductService } from '../../services/product.service';
 import { forkJoin, map } from 'rxjs';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 
 export interface PeriodicElement {
   name: string;
@@ -23,7 +27,7 @@ export interface PeriodicElement {
   styleUrls: ['./products.component.scss'],
   standalone: false
 })
-export class ProductsComponent implements OnInit, AfterViewInit {
+export class ProductsComponent extends CommonBaseComponent implements OnInit, AfterViewInit {
   
   totalProducts: number = 0;
   ELEMENT_DATA: PeriodicElement[] = [];
@@ -38,10 +42,11 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
   offset: number = 0;
   limit: number = 10;
-  constructor(private router: Router, private productService: ProductService) {}
-
-  ngOnInit() {
-    this.getProducts();
+  constructor(private router: Router, private productService: ProductService, private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService) {
+      super(translateConfigService, translate, storageService);
+      super.ngOnInit();
   }
 
   getProducts() {
@@ -93,6 +98,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.getProducts();
     this.dataSource.paginator = this.matPaginator;
   }
   /** Whether the number of selected elements matches the total number of rows. */

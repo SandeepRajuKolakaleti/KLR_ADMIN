@@ -9,7 +9,7 @@ import { StorageService } from '../../../shared/services/storage/storage.service
 import { AppConstants } from '../../../app.constants';
 import { CommonService } from '../../../shared/services/common/common.service';
 import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
-import { CommonBaseComponent } from 'src/app/shared/components/common-base/common-base.component';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
 
 @Component({
     selector: 'app-login',

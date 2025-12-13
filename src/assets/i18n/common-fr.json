@@ -7,5 +7,15 @@
     "WELCOME": "Welcome to our application common fr json",
     "login": "Login here",
     "INVALIDDETAILS": "In vald details",
-    "OTPVERIFIED": "OTP verified successfully"
+    "OTPVERIFIED": "OTP verified successfully",
+    "DASHBOARD": {
+        "NAME": "Tableau de bord"
+    },
+    "PRODUCTLIST": "Liste de produits",
+    "BRANDS": "Marques",
+    "CATEGORIES": "Catégories",
+    "SUBCATEGORY": "Sous-catégorie",
+    "CHILDCATGEORY": "Catégorie enfant",
+    "VENDORSLIST": "Liste des fournisseurs",
+    "USERSLIST": "Liste des utilisateurs"
 }

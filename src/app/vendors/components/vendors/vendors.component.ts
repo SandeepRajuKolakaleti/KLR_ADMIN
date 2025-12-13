@@ -8,6 +8,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { forkJoin, map } from 'rxjs';
+import { CommonBaseComponent } from 'src/app/shared/components/common-base/common-base.component';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
+import { TranslateConfigService } from 'src/app/shared/services/translate/translate-config.service';
 
 @Component({
     selector: 'app-vendors',
@@ -15,7 +19,7 @@ import { forkJoin, map } from 'rxjs';
     styleUrls: ['./vendors.component.scss'],
     standalone: false
 })
-export class VendorsComponent implements OnInit, AfterViewInit {
+export class VendorsComponent extends CommonBaseComponent implements OnInit, AfterViewInit {
   ELEMENT_DATA: any[] = [];
   vendors: any[] = [];
   totalVendors: number = 0;
@@ -31,9 +35,14 @@ export class VendorsComponent implements OnInit, AfterViewInit {
   limit: number = 10;
 
   constructor(private router: Router, private vendorService: VendorService, 
-    private snackBar: MatSnackBar) {}
+    private snackBar: MatSnackBar, private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService) {
+      super(translateConfigService, translate, storageService);
+      super.ngOnInit();
+  }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.getVendors();
   }
 

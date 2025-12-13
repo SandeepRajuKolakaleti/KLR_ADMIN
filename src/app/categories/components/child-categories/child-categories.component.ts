@@ -4,13 +4,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { AppConstants } from 'src/app/app.constants';
-import { PeriodicElement } from 'src/app/products/components/products/products.component';
+import { AppConstants } from '../../../app.constants';
 import { SubCategoryService } from '../../services/sub-category.service';
 import { CategoryService } from '../../services/category.service';
 import { ChildCategoryService } from '../../services/child-category.service';
 import { forkJoin, map } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 export interface ChildCategory {
   Id: number,
   ThumnailImage: String,
@@ -26,7 +29,7 @@ export interface ChildCategory {
     styleUrls: ['./child-categories.component.scss'],
     standalone: false
 })
-export class ChildCategoriesComponent {
+export class ChildCategoriesComponent extends CommonBaseComponent  {
   totalChildCategories: number = 0;
   ELEMENT_DATA: ChildCategory[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'category', 'subCategory', 'slug', 'status', 'action'];
@@ -47,10 +50,16 @@ export class ChildCategoriesComponent {
   selectedSubCategory = 0;
 
   constructor(private router: Router, private subCategoryService: SubCategoryService, private fb: FormBuilder,
-    private categoryService: CategoryService, private childCategoryService: ChildCategoryService, private snackBar: MatSnackBar
-  ) {}
+    private categoryService: CategoryService, private childCategoryService: ChildCategoryService, private snackBar: MatSnackBar,
+    private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService,
+  ) {
+    super(translateConfigService, translate, storageService);
+    super.ngOnInit();
+  }
 
-  ngOnInit() {
+  override ngOnInit(): void {
     this.childCategoryFrom = this.fb.group({
       Id: [''],
       File: [null, Validators.required],

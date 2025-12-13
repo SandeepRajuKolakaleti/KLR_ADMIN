@@ -7,7 +7,7 @@ import { SubCategoryService } from '../../../categories/services/sub-category.se
 import { ChildCategoryService } from '../../../categories/services/child-category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VendorService } from '../../../vendors/services/vendor.service';
-import { AppConstants } from 'src/app/app.constants';
+import { AppConstants } from '../../../app.constants';
 
 @Component({
     selector: 'app-add-product',

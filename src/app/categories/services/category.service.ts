@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { StorageService } from 'src/app/shared/services/storage/storage.service';
-import { environment } from 'src/environments/environment';
+import { StorageService } from '../../shared/services/storage/storage.service';
+import { environment } from '../../../environments/environment';
 import { Category } from '../components/categories/categories.component';
 import { Observable } from 'rxjs';
 

@@ -8,6 +8,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { BrandsService } from '../../services/brands.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 export interface Brand {
   Id: number,
   ThumnailImage: String,
@@ -21,7 +25,7 @@ export interface Brand {
     styleUrls: ['./brands.component.scss'],
     standalone: false
 })
-export class BrandsComponent {
+export class BrandsComponent extends CommonBaseComponent {
   totalBrands: number = 0;
   ELEMENT_DATA: Brand[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'slug', 'status', 'action'];
@@ -38,9 +42,15 @@ export class BrandsComponent {
   brandFrom!: FormGroup;
 
   constructor(private router: Router, private brandService: BrandsService, private fb: FormBuilder,
-    private snackBar: MatSnackBar) {}
+    private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService,
+    private snackBar: MatSnackBar) {
+      super(translateConfigService, translate, storageService);
+      super.ngOnInit();
+    }
 
-  ngOnInit() {
+  override ngOnInit(): void {
     this.brandFrom = this.fb.group({
       Id: [''],
       File: [null, Validators.required],

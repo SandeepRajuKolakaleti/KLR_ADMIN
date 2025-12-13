@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VendorService } from '../../services/vendor.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AppConstants } from 'src/app/app.constants';
+import { AppConstants } from '../../../app.constants';
 
 @Component({
   selector: 'app-add-vendor', 

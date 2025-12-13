@@ -10,8 +10,8 @@ const declarations: any = [CommonBaseComponent, MatTableResponsiveDirective];
 const modules = [
   CommonModule,
   MaterialModule,
-  TranslateLanguageModule,
   TranslateModule,
+  TranslateLanguageModule,
   FormsModule,
   ReactiveFormsModule
 ];

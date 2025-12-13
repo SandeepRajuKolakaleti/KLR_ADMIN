@@ -8,6 +8,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { forkJoin, map } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
+import { TranslateConfigService } from 'src/app/shared/services/translate/translate-config.service';
+import { CommonBaseComponent } from 'src/app/shared/components/common-base/common-base.component';
 
 @Component({
   selector: 'app-users',
@@ -15,7 +19,7 @@ import { forkJoin, map } from 'rxjs';
   styleUrl: './users.component.scss',
   standalone: false
 })
-export class UsersComponent {
+export class UsersComponent extends CommonBaseComponent {
   ELEMENT_DATA: any[] = [];
   users: any[] = [];
   totalUsers: number = 0;
@@ -31,9 +35,15 @@ export class UsersComponent {
   limit: number = 10;
 
   constructor(private router: Router, private userService: UsersService, 
-    private snackBar: MatSnackBar) {}
+    private snackBar: MatSnackBar,
+    private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService,) {
+      super(translateConfigService, translate, storageService);
+      super.ngOnInit();
+  }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.getUsers();
   }
 

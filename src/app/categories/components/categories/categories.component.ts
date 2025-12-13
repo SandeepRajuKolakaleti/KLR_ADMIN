@@ -6,8 +6,12 @@ import { Router } from '@angular/router';
 import { CategoryService } from '../../services/category.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { forkJoin, map } from 'rxjs';
-import { AppConstants } from 'src/app/app.constants';
+import { AppConstants } from '../../../app.constants';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '../../../shared/services/storage/storage.service';
+import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
+import { CommonBaseComponent } from '../../../shared/components/common-base/common-base.component';
 export interface Category {
   Id: number,
   ThumnailImage: String,
@@ -21,7 +25,7 @@ export interface Category {
     styleUrls: ['./categories.component.scss'],
     standalone: false
 })
-export class CategoriesComponent implements OnInit, AfterViewInit {
+export class CategoriesComponent extends CommonBaseComponent implements OnInit, AfterViewInit{
   totalCategories: number = 0;
   ELEMENT_DATA: Category[] = [];
   displayedColumns: string[] = ['select', 'image', 'name', 'slug', 'status', 'action'];
@@ -37,9 +41,16 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
 
   categoryFrom!: FormGroup;
 
-  constructor(private router: Router, private categoryService: CategoryService, private fb: FormBuilder, private snackBar: MatSnackBar) {}
+  constructor(private router: Router, private categoryService: CategoryService, private fb: FormBuilder, private snackBar: MatSnackBar,
+    private  translate: TranslateService,
+    protected override storageService: StorageService, 
+    protected override translateConfigService: TranslateConfigService,
+  ) {
+    super(translateConfigService, translate, storageService);
+    super.ngOnInit();
+  }
 
-  ngOnInit() {
+  override ngOnInit(): void {
     this.categoryFrom = this.fb.group({
       Id: [''],
       File: [null, Validators.required],
