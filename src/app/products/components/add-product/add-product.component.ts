@@ -8,6 +8,7 @@ import { ChildCategoryService } from '../../../categories/services/child-categor
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VendorService } from '../../../vendors/services/vendor.service';
 import { AppConstants } from '../../../app.constants';
+import { BrandsService } from 'src/app/categories/services/brands.service';
 
 @Component({
     selector: 'app-add-product',
@@ -52,8 +53,11 @@ export class AddProductComponent implements OnDestroy, OnInit {
   };
   categories: any[] = [];
   subCategories: any[] = [];
+  subCategoriesData: any[] = [];
   childCategories: any[] = [];
+  childCategoriesData: any[] = [];
   SpecificationsKeysList: string[] = [];
+  brands: any[]= [];
   constructor(private fb: FormBuilder, 
     private route: ActivatedRoute, 
     private router: Router,
@@ -62,6 +66,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
     private categoryService: CategoryService,
     private subCategoryService: SubCategoryService,
     private childCategoryService: ChildCategoryService,
+    private brandsService: BrandsService,
     private snackBar: MatSnackBar
   ) {}
   ngOnInit() {
@@ -104,6 +109,7 @@ export class AddProductComponent implements OnDestroy, OnInit {
         }
       }
     });
+    this.loadBrands();
     this.loadCategories();
     this.loadSubCategories();
     this.loadChildCategories();
@@ -121,10 +127,11 @@ export class AddProductComponent implements OnDestroy, OnInit {
   getSubCategoriesbyCategory(selectedCategory: string) {
     if (selectedCategory) {
       this.subCategories = JSON.parse(localStorage.getItem('subCategories') || '[]');
-      this.subCategories = this.subCategories.filter((subCategory: any) => {
+      this.subCategories = this.subCategoriesData.filter((subCategory: any) => {
         return subCategory.Category === selectedCategory;
       });
       if (this.subCategories.length > 0) {
+        this.productForm.controls["SubCategory"].setValue(this.subCategories[0]?.Id.toString());
         this.onSubCategorySelected({ target: { value: Number(this.subCategories[0]?.Id.toString()) } });
       } else {
         this.childCategories = [];
@@ -151,9 +158,12 @@ export class AddProductComponent implements OnDestroy, OnInit {
   getChildCategoriesbySubCategory(selectedSubCategory: string) {
     if (selectedSubCategory) {
       this.childCategories = JSON.parse(localStorage.getItem('childCategories') || '[]');
-      this.childCategories = this.childCategories.filter((childCategory: any) => {
+      this.childCategories = this.childCategoriesData.filter((childCategory: any) => {
         return childCategory.SubCategory === selectedSubCategory;
       });
+      if (this.childCategories.length > 0) {
+        this.productForm.controls["ChildCategory"].setValue(this.childCategories[0]?.Id.toString());
+      }
     } else {
       this.childCategories = [];
       this.productForm.patchValue({ ChildCategory: '' });
@@ -161,6 +171,16 @@ export class AddProductComponent implements OnDestroy, OnInit {
   }
 
   onchildCategorySelected(event: any) {
+  }
+
+  onBrandSelected(event: any) {
+  }
+
+  loadBrands() {
+    this.brandsService.getAll().subscribe((respoonse: any) => {
+      console.log(respoonse.data);
+      this.brands = respoonse.data;
+    })
   }
 
   loadCategories() {
@@ -173,14 +193,16 @@ export class AddProductComponent implements OnDestroy, OnInit {
   loadSubCategories() {
     this.subCategoryService.getAll().subscribe((subCategories: any) => {
       localStorage.setItem('subCategories', JSON.stringify(subCategories.data));
-      this.subCategories = subCategories.data;
+      this.subCategoriesData = subCategories.data;
+      this.subCategories = this.subCategoriesData;
     });
   }
 
   loadChildCategories() {
     this.childCategoryService.getAll().subscribe((childCategories: any) => {
       localStorage.setItem('childCategories', JSON.stringify(childCategories.data));
-      this.childCategories = childCategories.data;
+      this.childCategoriesData = childCategories.data;
+      this.childCategories = this.childCategoriesData;
     });
   }
 
