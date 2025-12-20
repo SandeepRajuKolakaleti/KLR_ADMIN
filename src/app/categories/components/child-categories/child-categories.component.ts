@@ -81,17 +81,17 @@ export class ChildCategoriesComponent extends CommonBaseComponent  {
   }
 
   getAllCategories() {
-    this.categoryService.getAll().subscribe((data) => {
-      console.log(data);
-      this.categories = data;
+    this.categoryService.getAll().subscribe((categories) => {
+      console.log(categories.data);
+      this.categories = categories.data;
     })
   }
 
   getAllSubCategories() {
     console.log(this.selectedCategory);
-    this.subCategoryService.getSubCategoriesByCategoryId(this.selectedCategory).subscribe((data) => {
-      console.log(data);
-      this.subCategories = data;
+    this.subCategoryService.getSubCategoriesByCategoryId(this.selectedCategory).subscribe((subCatergory) => {
+      console.log(subCatergory);
+      this.subCategories = subCatergory;
     })
   }
 

@@ -73,8 +73,8 @@ export class AddProductComponent implements OnDestroy, OnInit {
       Name: ['', Validators.required],
       Slug: ['', Validators.required],
       Category: ['', Validators.required],
-      SubCategory: ['', Validators.required],
-      ChildCategory: ['', Validators.required],
+      SubCategory: ['', ],
+      ChildCategory: ['', ],
       Brand: ['', Validators.required],
       SKU: ['', Validators.required],
       Price: ['', Validators.required],
@@ -165,38 +165,38 @@ export class AddProductComponent implements OnDestroy, OnInit {
 
   loadCategories() {
     this.categoryService.getAll().subscribe((categories: any) => {
-      localStorage.setItem('categories', JSON.stringify(categories));
-      this.categories = categories;
+      localStorage.setItem('categories', JSON.stringify(categories.data));
+      this.categories = categories.data;
     });
   } 
 
   loadSubCategories() {
     this.subCategoryService.getAll().subscribe((subCategories: any) => {
-      localStorage.setItem('subCategories', JSON.stringify(subCategories));
-      this.subCategories = subCategories;
+      localStorage.setItem('subCategories', JSON.stringify(subCategories.data));
+      this.subCategories = subCategories.data;
     });
   }
 
   loadChildCategories() {
     this.childCategoryService.getAll().subscribe((childCategories: any) => {
-      localStorage.setItem('childCategories', JSON.stringify(childCategories));
-      this.childCategories = childCategories;
+      localStorage.setItem('childCategories', JSON.stringify(childCategories.data));
+      this.childCategories = childCategories.data;
     });
   }
 
   loadVendors() {
     this.vendorService.getVendors().subscribe((vendors: any) => {
-      localStorage.setItem('vendors', JSON.stringify(vendors));
-      this.vendors = vendors;
+      localStorage.setItem('vendors', JSON.stringify(vendors.data));
+      this.vendors = vendors.data;
     }); 
   }
 
   hideSubCategory() {
-    return this.subCategories.length > 0 && this.productForm.value.Category !== '';
+    return this.subCategories.length > 0 && (this.productForm.value.Category !== '' && this.productForm.value.SubCategory !== '');
   }
 
   hideChildCategory() {
-    return this.childCategories.length > 0 && this.productForm.value.SubCategory !== '';
+    return this.childCategories.length > 0 && (this.productForm.value.SubCategory !== '' && this.productForm.value.ChildCategory !== '');
   }
 
   fillForm() {

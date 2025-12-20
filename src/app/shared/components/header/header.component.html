@@ -78,10 +78,18 @@
                     </a>
                     <div class="submenu">
                         <a href="javascript:void(0)" (click)="route('products', apiToken)">{{"PRODUCTS.PRODUCTLIST"|translate}}</a>
-                        <a href="javascript:void(0)" (click)="route('categories', apiToken)">{{"PRODUCTS.CATEGORIES"|translate}}</a>
-                        <a href="javascript:void(0)" (click)="route('categories/sub-category', apiToken)">{{"PRODUCTS.SUBCATEGORY"|translate}}</a>
-                        <a href="javascript:void(0)" (click)="route('categories/child-category', apiToken)">{{"PRODUCTS.CHILDCATGEORY"|translate}}</a>
                         <a href="javascript:void(0)" (click)="route('brands', apiToken)">{{"PRODUCTS.BRANDS"|translate}}</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">{{"CATEGORYS.MANAGECATEGORY"|translate}}</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="javascript:void(0)" (click)="route('categories', apiToken)">{{"CATEGORYS.CATEGORIES"|translate}}</a>
+                        <a href="javascript:void(0)" (click)="route('categories/sub-category', apiToken)">{{"CATEGORYS.SUBCATEGORY"|translate}}</a>
+                        <a href="javascript:void(0)" (click)="route('categories/child-category', apiToken)">{{"CATEGORYS.CHILDCATGEORY"|translate}}</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -182,6 +190,15 @@
             </ul>
             <hr />
             <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="javascript:void(0)">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">{{"ORDERS.MANAGEORDERS"|translate}}</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="javascript:void(0)" (click)="route('orders', apiToken)">{{"ORDERS.ORDERSLIST"|translate}}</a>
+                    </div>
+                </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="javascript:void(0)">
                         <i class="icon material-icons md-settings"></i>

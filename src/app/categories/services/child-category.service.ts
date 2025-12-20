@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 export class ChildCategoryService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
-  getAll(offset: number = 0, limit: number = 10): Observable<ChildCategory[]> {
+  getAll(offset: number = 0, limit: number = 10): Observable<any> {
     const url = environment.api.URL+ 'api/child-categories/getAll';
     const CrApiSessionStorage = this.storageService.get('ApiToken');
     return this.http.get<ChildCategory[]>(url, {

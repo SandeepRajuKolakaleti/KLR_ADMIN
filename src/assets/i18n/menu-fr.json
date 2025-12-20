@@ -1,17 +1,20 @@
 {
-  "HOME": "Accueil",
-  "DontHaveAccount": "Vous n'avez pas de compte?",
-  "DASHBOARD": {
-    "NAME": "Tableau de bord"
-  },
-  "PRODUCTS": {
-    "MANAGEPRODUCTS": "Gérer les produits",
-    "PRODUCTLIST": "Liste des produits",
-    "BRANDS": "Marques",
-    "CATEGORIES": "Catégories",
-    "SUBCATEGORY": "Sous-catégorie",
-    "CHILDCATGEORY": "Catégorie enfant"
-  },
+	"HOME": "Accueil",
+	"DontHaveAccount": "Vous n'avez pas de compte?",
+	"DASHBOARD": {
+		"NAME": "Tableau de bord"
+	},
+	"PRODUCTS": {
+		"MANAGEPRODUCTS": "Gérer les produits",
+		"PRODUCTLIST": "Liste des produits",
+		"BRANDS": "Marques"
+	},
+	"CATEGORYS": {
+		"MANAGECATEGORY": "Gérer les catégories",
+		"CATEGORIES": "Catégories",
+		"SUBCATEGORY": "Sous-catégorie",
+		"CHILDCATGEORY": "Catégorie enfant"
+	},
 	"ORDERS": {
 	  "MANAGEORDERS": "Gérer les commandes",
 	  "ORDERSLIST": "Liste des commandes"

@@ -11,7 +11,7 @@ import { SubCategory } from '../components/sub-categories/sub-categories.compone
 export class SubCategoryService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
-  getAll(offset: number = 0, limit: number = 10): Observable<SubCategory[]> {
+  getAll(offset: number = 0, limit: number = 10): Observable<any> {
     const url = environment.api.URL+ 'api/sub-categories/getAll';
     const CrApiSessionStorage = this.storageService.get('ApiToken');
     return this.http.get<SubCategory[]>(url, {
@@ -48,7 +48,7 @@ export class SubCategoryService {
     })
   }
 
-  getSubCategoriesByCategoryId(Id: number): Observable<SubCategory> {
+  getSubCategoriesByCategoryId(Id: number): Observable<any> {
     const url = environment.api.URL+ 'api/sub-categories/category/'+ Id;
     const CrApiSessionStorage = this.storageService.get('ApiToken');
     return this.http.get<SubCategory>(url, {
