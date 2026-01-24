@@ -88,6 +88,13 @@ export class AuthService {
 		});
 	}
 
+	getProfileInformation(id :string) {
+		const CrApiSessionStorage = this.storageService.get('ApiToken');
+		return this.http.get(this.API_URL+ 'api/users/profile/'+id, {
+			headers: this.getAuthorizationHeaders(CrApiSessionStorage),
+		});
+	}
+
 	resetPassword(options: any) {
 		const CrApiSessionStorage = this.storageService.get('ApiToken');
 		return this.http.post(this.API_URL + 'api/users/resetPassword', options, {

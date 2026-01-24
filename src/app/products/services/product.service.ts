@@ -41,9 +41,10 @@ export class ProductService {
       }
     });
   }
-  getProductById(id: string) {
-    return this.http.get(environment.api.URL+`api/products/product/${id}`, {
-      headers: this.getHeaders()
+  getProductsByIds(ids: string[]) {
+    return this.http.get(environment.api.URL+`api/products/product/get-by-ids`, {
+      headers: this.getHeaders(),
+      params: { ids: ids.toString() }
     });
   }
   createProduct(product: any) {
