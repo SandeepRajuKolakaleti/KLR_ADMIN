@@ -186,5 +186,16 @@ export class AppConstants {
     uploadDefault: 'assets/imgs/theme/upload.svg'
   }
 
-  
+  public static orderStatus = {
+    Pending: 'Pending', 
+    Processing: 'Processing', 
+    Shipped: 'Shipped', 
+    Delivered: 'Delivered', 
+    Cancelled: 'Cancelled'
+  }
+
+  public static payment = {
+    Success: 'Success',
+    Pending: 'Pending'
+  }
 }

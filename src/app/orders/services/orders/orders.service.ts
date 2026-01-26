@@ -37,6 +37,18 @@ export class OrdersService {
     });
   }
 
+  getOrderById(orderId: number) {
+    return this.http.get<any>(environment.api.URL+`api/orders/order/${orderId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  getOrdersByVendorId(userId: number) {
+    return this.http.get<any>(environment.api.URL+`api/orders/vendor/${userId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
   delete(orderId: number) {
     return this.http.delete<any>(environment.api.URL+`api/orders/delete/${orderId}`, {
       headers: this.getHeaders(),

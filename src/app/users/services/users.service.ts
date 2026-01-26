@@ -48,6 +48,13 @@ export class UsersService {
       headers: this.getHeaders()
     });
   }
+
+  getDeliveryMen() {
+    return this.http.get(environment.api.URL+'api/users/deliveryBoys', {
+      headers: this.getHeaders()
+    });
+  }
+
   create(vendor: any) {
     return this.http.post(environment.api.URL+'api/users/register', vendor, {
       headers: this.getFormDataHeaders()

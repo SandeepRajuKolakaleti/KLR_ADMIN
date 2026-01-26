@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { StorageService } from '../../../shared/services/storage/storage.service';
 import { TranslateConfigService } from '../../../shared/services/translate/translate-config.service';
 import { OrdersService } from '../../services/orders/orders.service';
+import { AppConstants } from 'src/app/app.constants';
 
 @Component({
     selector: 'app-orders',
@@ -46,12 +47,22 @@ export class OrdersComponent extends CommonBaseComponent implements OnInit, Afte
   }
 
   loadUserOrders(offset: number, limit: number) {
-    this.ordersService.getUserOrders(offset, limit).subscribe((response: any) => {
-      console.log(response);
-      this.total = response.total;
-      this.dataSource = new MatTableDataSource<any>(response.data);
-      this.dataSource.paginator = this.matPaginator;
-    });
+    let ApiToken = this.storageService.get('ApiToken');
+    if (ApiToken.user_permission === AppConstants.userRole.admin) {
+      this.ordersService.getUserOrders(offset, limit).subscribe((response: any) => {
+        console.log(response);
+        this.total = response.total;
+        this.dataSource = new MatTableDataSource<any>(response.data);
+        this.dataSource.paginator = this.matPaginator;
+      });
+    } else if (ApiToken.user_permission === AppConstants.userRole.vendor) {
+      this.ordersService.getOrdersByVendorId(ApiToken.id).subscribe((response: any) => {
+        console.log(response);
+        this.total = response.total;
+        this.dataSource = new MatTableDataSource<any>(response.data);
+        this.dataSource.paginator = this.matPaginator;
+      });
+    }
   }
 
   pageChanged(event: any) {

@@ -9,19 +9,50 @@
         <div class="card">
             <header class="card-header">
                 <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                    <div class="col-lg-10 col-md-6 mb-lg-0 mb-15">
                         <span> <i class="material-icons md-calendar_today"></i> <b>{{orderDate}}</b> </span> <br />
                         <small class="text-muted">Order ID: {{orderDetail.OrderNumber}}</small>
                     </div>
-                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                        <select class="form-select d-inline-block mb-lg-0 mr-5 mw-200">
-                            <option>Change status</option>
-                            <option>Inprogress</option>
-                            <option>Delivered</option>
-                            <option>Completed</option>
-                            <option>Declined</option>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-lg-12 col-md-6 ms-auto text-md-end">
+                        <!-- Payment -->
+                        <select
+                            class="form-select d-inline-block mw-200 me-2"
+                            [(ngModel)]="selectedPayment"
+                        >
+                            <option value="">Payment</option>
+                            <option *ngFor="let pay of payment" [value]="pay.value">
+                            {{ pay.label }}
+                            </option>
                         </select>
-                        <a class="btn btn-primary" href="#">Save</a>
+                        <select
+                            class="form-select d-inline-block mb-lg-0 mr-5 mw-200"
+                            [(ngModel)]="selectedStatus"
+                            >
+                            <option value="">Change status</option>
+                            
+                            <option
+                            *ngFor="let status of orderStatuses"
+                            [value]="status.value"
+                            >
+                            {{ status.label }}
+                            </option>
+                        </select>
+                    
+                        <!-- Assign Delivery Man -->
+                        <select
+                            class="form-select d-inline-block mw-200 me-2"
+                            [(ngModel)]="selectedDeliverymanId"
+                        >
+                            <option value="">Assign delivery</option>
+                            @if(deliveryMen) {
+                                <option *ngFor="let man of deliveryMen" [value]="man.id">
+                                {{ man.name }}
+                                </option>
+                            }
+                        </select>
+                        <button class="btn btn-primary" [disabled]="!selectedStatus && !selectedPayment && !selectedDeliverymanId" (click)="saveOrderStatus()" href="javascript:void(0)">Save</button>
                         <a class="btn btn-secondary print ms-2" (click)="printPdf(orderDetail)" href="javascript:void(0)"><i class="icon material-icons md-print"></i></a>
                     </div>
                 </div>
@@ -36,11 +67,13 @@
                             </span>
                             <div class="text">
                                 <h6 class="mb-1">Customer</h6>
-                                <p class="mb-1">
-                                    {{user.name}} <br />
-                                    {{user.email}}<br />
-                                    {{user.phoneNumber}}
-                                </p>
+                                @if (user) {
+                                    <p class="mb-1">
+                                        {{user.name}} <br />
+                                        {{user.email}}<br />
+                                        {{user.phoneNumber}}
+                                    </p>
+                                }
                                 <!-- <a href="#">View profile</a> -->
                             </div>
                         </article>
@@ -128,11 +161,11 @@
                                                 </dl>
                                                 <dl class="dlist">
                                                     <dt class="text-muted">Status:</dt>
-                                                    @if(orderDetail.Status === 'Completed') {
+                                                    @if(orderDetail.Status === appConstants.orderStatus.Shipped || orderDetail.Status === appConstants.orderStatus.Delivered) {
                                                         <dd>
                                                             <span class="badge rounded-pill alert-success text-success">Payment done</span>
                                                         </dd>
-                                                    } @else if(orderDetail.Status === 'Pending') {
+                                                    } @else if(orderDetail.Status === appConstants.orderStatus.Pending || orderDetail.Status === appConstants.orderStatus.Processing) {
                                                         <dd>
                                                             <span class="badge rounded-pill alert-warning text-warning">Pending payment</span>
                                                         </dd>

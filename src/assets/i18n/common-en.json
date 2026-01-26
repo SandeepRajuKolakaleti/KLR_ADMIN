@@ -7,6 +7,7 @@
     "WELCOME": "Welcome to our application common en json",
     "login": "Login here",
     "INVALIDDETAILS": "In valid details",
+    "UPDATEDORDERDETAILS": "Order details updated successfully",
     "OTPVERIFIED": "OTP verified successfully",
     "DASHBOARD": {
         "NAME": "Dashboard"
