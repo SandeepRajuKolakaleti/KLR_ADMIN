@@ -1,7 +1,7 @@
 <header class="main-header style-2 navbar">
     <div class="col-brand">
         <a href="javascript:void(0)" class="brand-wrap">
-            <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+            <img [src]="logo" class="logo" alt="Nest Dashboard" />
         </a>
         @if(isMobile) {
             <button class="btn btn-icon btn-aside-minimize" (click)="openAside()"><i class="text-muted material-icons md-menu_open"></i></button>
@@ -56,7 +56,7 @@
 <aside class="navbar-aside" id="offcanvas_aside" *ngIf = "(isLoggedIn | async)">
     <div class="aside-top">
         <a href="#" class="brand-wrap">
-            <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+            <img [src]="logo" class="logo" alt="Nest Dashboard" />
         </a>
         <div>
             <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>

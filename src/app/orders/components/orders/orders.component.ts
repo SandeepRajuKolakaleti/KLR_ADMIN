@@ -28,6 +28,8 @@ export class OrdersComponent extends CommonBaseComponent implements OnInit, Afte
   };
   offset: number = 0;
   limit: number = 10;
+  userRole: string = '';
+  appConstants = AppConstants;
   constructor(private router: Router, private  translate: TranslateService,
     protected override storageService: StorageService, 
     protected override translateConfigService: TranslateConfigService,
@@ -48,6 +50,7 @@ export class OrdersComponent extends CommonBaseComponent implements OnInit, Afte
 
   loadUserOrders(offset: number, limit: number) {
     let ApiToken = this.storageService.get('ApiToken');
+    this.userRole = ApiToken.user_permission;
     if (ApiToken.user_permission === AppConstants.userRole.admin) {
       this.ordersService.getUserOrders(offset, limit).subscribe((response: any) => {
         console.log(response);

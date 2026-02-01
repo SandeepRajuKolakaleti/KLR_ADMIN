@@ -22,6 +22,7 @@ export class HeaderComponent extends CommonBaseComponent implements OnInit, Afte
   isLoggedIn!: Observable<boolean>;
   apiToken: any;
   appConstants = AppConstants;
+  logo: string = AppConstants.APPLogo;
   constructor(public router: Router, private authService: AuthService,
   private commonService: CommonService,
   private  translate: TranslateService,

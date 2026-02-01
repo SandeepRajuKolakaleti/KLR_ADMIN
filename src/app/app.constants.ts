@@ -1,6 +1,9 @@
 export class AppConstants {
   constructor() {}
 
+  public static readonly APPNAME = 'KLR Admin Dashboard';
+
+  public static readonly APPLogo = 'assets/imgs/KLR-logo.png';
   public static userRole = {
     driver: 'Driver',
     admin: 'Admin',
