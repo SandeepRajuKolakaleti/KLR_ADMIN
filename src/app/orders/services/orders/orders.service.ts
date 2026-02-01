@@ -49,6 +49,12 @@ export class OrdersService {
     });
   }
 
+  getOrdersByDeliveryBoyId(userId: number) {
+    return this.http.get<any>(environment.api.URL+`api/orders/delivery-boy/${userId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
   delete(orderId: number) {
     return this.http.delete<any>(environment.api.URL+`api/orders/delete/${orderId}`, {
       headers: this.getHeaders(),

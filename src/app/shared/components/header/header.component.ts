@@ -139,7 +139,13 @@ export class HeaderComponent extends CommonBaseComponent implements OnInit, Afte
         this.router.navigate(['orders'] );
       }
     } else if(apiToken.user_permission === AppConstants.userType.deliveryBoy) {
-
+      if (value === 'dashboard') {
+        this.router.navigate(['dashboard'] );
+      } else if (value === 'profile') {
+        this.router.navigate(['profile'] );
+      } else if (value === 'orders') {
+        this.router.navigate(['orders'] );
+      }
     } else {
       if (value === 'dashboard') {
         this.router.navigate(['dashboard'] );

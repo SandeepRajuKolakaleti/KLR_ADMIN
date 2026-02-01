@@ -49,6 +49,8 @@ export class OrderDetailComponent extends CommonBaseComponent implements OnInit 
         { label: 'Pending', value: AppConstants.payment.Pending },
     ];
 
+    userRole: string = '';
+
     // 🔹 Delivery men (usually from API)
     selectedDeliverymanId: number | null = null;
     deliveryMen: { id: number; name: string }[] = [];
@@ -65,7 +67,16 @@ export class OrderDetailComponent extends CommonBaseComponent implements OnInit 
     }
     override ngOnInit() {
         console.log(JSON.parse(this.route.snapshot.params['data']));
+        this.loadUserRole();
         this.loadOrderDetails();
+    }
+
+    loadUserRole() {
+        const apiToken: any = localStorage.getItem('ApiToken');
+        const parsedApiToken = JSON.parse(apiToken);
+        if(parsedApiToken && parsedApiToken.user_permission) {
+            this.userRole = parsedApiToken.user_permission;
+        }
     }
 
     loadOrderDetails() {
@@ -79,7 +90,7 @@ export class OrderDetailComponent extends CommonBaseComponent implements OnInit 
             console.log("Order details fetched", response);
             const orderData = response;
             this.orderDetail = response;
-            this.orderDetailObject = response;
+            this.orderDetailObject = JSON.parse(JSON.stringify(response));
             this.orderDate = this.commonService.formatDateTime(new Date(orderData.OrderDate));
             if(orderData.Items && orderData.Items.length > 0) {
                 this.getProductsByIds(orderData.Items);
@@ -142,7 +153,7 @@ export class OrderDetailComponent extends CommonBaseComponent implements OnInit 
                 this.orderDetailObject.IsPaid = this.selectedPayment === AppConstants.payment.Success? true: false;
             }
             if (this.selectedDeliverymanId) {
-                this.orderDetailObject.DeliveryManId = Number(this.selectedDeliverymanId);
+                this.orderDetailObject.DeliveryBoyId = Number(this.selectedDeliverymanId);
             }
             this.ordersService.updateOrder(this.orderDetailObject).subscribe((response: any) => {
                 console.log(response);

@@ -52,6 +52,22 @@ export class AddUsersComponent {
       Revenue: ['', Validators.required],
       Status: ['', Validators.required],
     });
+    this.userForm.controls['userRole'].valueChanges.subscribe(value => {
+      console.log('Value changed:', value);
+      switch(value) {
+        case AppConstants.userType.admin:
+          this.userForm.controls['permissionId'].setValue(AppConstants.permissionType.admin);
+          break;
+        case AppConstants.userType.vendor:
+          this.userForm.controls['permissionId'].setValue(AppConstants.permissionType.vendor);
+          break;
+        case AppConstants.userType.deliveryBoy:
+          this.userForm.controls['permissionId'].setValue(AppConstants.permissionType.deliveryBoy);
+          break;
+        default:
+          this.userForm.controls['permissionId'].setValue(AppConstants.permissionType.user);
+      }
+    });
     this.sub = this.route.queryParams.subscribe(params => {
       if (params && params["data"]) {
         this.user = (JSON.parse(params["data"])).user || this.user;
@@ -130,17 +146,17 @@ export class AddUsersComponent {
       }
       this.usersService.create(formData).subscribe(
         (response: any) => {
-          console.log('Vendor created successfully:', response);
+          console.log('user created successfully:', response);
           // Handle success, e.g., navigate to product list or show a success message
-          this.snackBar.open('Vendor created successfully!', 'Close', {
+          this.snackBar.open('User created successfully!', 'Close', {
             duration: 3000,
             panelClass: ['snackbar-success']
           });
           this.userForm.reset();
-          this.router.navigate(['vendors']);
+          this.router.navigate(['users']);
         },
         (error: any) => {
-          console.error('Error creating vendor:', error);
+          console.error('Error creating user:', error);
           // Handle error, e.g., show an error message
         }
       );
@@ -170,8 +186,8 @@ export class AddUsersComponent {
       // formData.append('status', this.vendorForm.controls['Status'].value);
       formData.append('password', this.userForm.controls['Password'].value);
       formData.append('birthday', this.userForm.controls['Birthday'].value);
-      formData.append('userRole', AppConstants.userType.vendor);
-      formData.append('permissionId', AppConstants.permissionType.vendor);
+      formData.append('userRole', this.userForm.controls['userRole'].value);
+      formData.append('permissionId', this.userForm.controls['permissionId'].value);
       formData.append('revenue', this.userForm.controls['Revenue'].value);
       formData.append('totalSales', this.userForm.controls['TotalSales'].value);
       if (this.userForm.controls['File'].value) {

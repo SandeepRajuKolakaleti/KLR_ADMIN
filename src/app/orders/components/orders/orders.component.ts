@@ -62,6 +62,13 @@ export class OrdersComponent extends CommonBaseComponent implements OnInit, Afte
         this.dataSource = new MatTableDataSource<any>(response.data);
         this.dataSource.paginator = this.matPaginator;
       });
+    } else if (ApiToken.user_permission === AppConstants.userRole.deliveryBoy) {
+      this.ordersService.getOrdersByDeliveryBoyId(ApiToken.id).subscribe((response: any) => {
+        console.log(response);
+        this.total = response.total;
+        this.dataSource = new MatTableDataSource<any>(response.data);
+        this.dataSource.paginator = this.matPaginator;
+      });
     }
   }
 
