@@ -77,16 +77,6 @@ export class HeaderComponent extends CommonBaseComponent implements OnInit, Afte
   ngAfterViewInit() {
   }
 
-  openAside() {
-    this.booelanToggleMenu = !this.booelanToggleMenu;
-    $("body").toggleClass("aside-mini")
-    if(this.booelanToggleMenu){
-      $('#offcanvas_aside').css('transform', 'translateX(0%)');
-    } else {
-      $('#offcanvas_aside').css('transform', 'translateX(-100%)');
-    }
-  }
-
   signIn() {
     console.log('signIn');
     this.router.navigate(['login']);
