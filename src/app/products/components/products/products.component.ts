@@ -32,7 +32,7 @@ export class ProductsComponent extends CommonBaseComponent implements OnInit, Af
   totalProducts: number = 0;
   ELEMENT_DATA: PeriodicElement[] = [];
   products : any[] = [];
-  displayedColumns: string[] = ['select', 'position', 'image', 'name', 'price', 'status', 'date', 'action'];
+  displayedColumns: string[] = ['select', 'image', 'name', 'price', 'stockQty', 'status', 'date', 'action'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
   
@@ -62,6 +62,7 @@ export class ProductsComponent extends CommonBaseComponent implements OnInit, Af
           name: item.Name,
           image: item.ThumnailImage || 'assets/images/products/product-1.jpg',
           price: item.Price,
+          stockQty: item.StockQuantity,
           status: item.Status,
           date: new Date(item.createdAt).toLocaleDateString(),
           ...item

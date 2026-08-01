@@ -263,6 +263,8 @@ export class AddProductComponent implements OnDestroy, OnInit {
     this.productForm.controls['Vendor'].disable()
     this.productForm.markAsDirty();
     this.productForm.markAsTouched();
+    this.selectedFile = this.product.ThumnailImage;
+    this.productForm.controls['File'].setValue(this.product.ThumnailImage);
   }
 
   onFileSelected(event: Event): void {
@@ -386,7 +388,10 @@ export class AddProductComponent implements OnDestroy, OnInit {
       console.log('Specifications:', JSON.stringify(this.Specifications.value));
       formData.append('Specifications', JSON.stringify(this.Specifications.value));
       if (this.productForm.controls['File'].value) {
-        formData.append('file', this.selectedFile as Blob);
+        const base64Image = this.productForm.controls['File'].value;
+        const imageBlob = this.dataURItoBlob(base64Image);
+        const imageFile = new File([imageBlob], 'image.png', { type: 'image/png' });
+        formData.append('file', imageFile as Blob);
       }
       this.productService.updateProduct(formData).subscribe(
         (response: any) => {
@@ -406,6 +411,16 @@ export class AddProductComponent implements OnDestroy, OnInit {
     } else {
       console.error('Form is invalid');
     }
+  }
+
+  dataURItoBlob(dataURI: string): Blob {
+    const byteString = atob(dataURI.split(',')[1]); // Decode Base64
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+        int8Array[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([int8Array], { type: 'image/png' }); // Specify MIME type
   }
 
   ngOnDestroy() {
